@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using TakeFramework.Domain.Entities;
 using TakeFramework.Domain.Repositories;
 
@@ -31,6 +32,11 @@ namespace TakeFramework.EntityFrameworkCore
         {
             dbset.Remove(intput);
             dbContext.SaveChanges();
+        }
+
+        public override List<T> List()
+        {
+            return dbset.AsNoTracking().ToList();
         }
 
         public override T Update(T intput)

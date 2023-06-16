@@ -85,10 +85,7 @@ namespace TakeFramework.Domain.Repositories
             throw new NotImplementedException();
         }
 
-        public List<T> List()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract List<T> List();
 
         public List<T> List(Expression<Func<T, bool>> predicate)
         {
