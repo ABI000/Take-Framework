@@ -9,8 +9,7 @@ namespace TakeFramework.Domain.Services
     {
         public static IServiceCollection AddService(this IServiceCollection services)
         {
-            var fileInfos = FileUtilities.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll").Where(x => !x.Name.StartsWith("Microsoft.") && !x.Name.StartsWith("System.") && !x.Name.StartsWith("Azure."));
-            var types = fileInfos.Select(x => Assembly.LoadFrom(x.FullName)).SelectMany(x => x.GetTypes().Where(w => !w.IsInterface
+            var types = DependencyUtil.GetReferencedAssemblies().SelectMany(x => x.GetTypes().Where(w => !w.IsInterface
             && typeof(IBaseService).IsAssignableFrom(w)));
             foreach (var type in types)
             {
