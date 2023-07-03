@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-using TakeFramework.IO;
 
 namespace TakeFramework.Domain.Repositories
 {

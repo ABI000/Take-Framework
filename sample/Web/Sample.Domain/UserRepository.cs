@@ -1,6 +1,8 @@
-﻿using TakeFramework.EntityFrameworkCore;
+﻿using Sample.Core;
+using Sample.EntityFrameworkCore;
+using TakeFramework.EntityFrameworkCore;
 
-namespace SampleWeb
+namespace Sample.Domain
 {
     public class UserRepository : EFCoreRepository<User, long, SampleDbContext>
     {

@@ -1,6 +1,6 @@
 ﻿using TakeFramework.Domain.Entities;
 
-namespace SampleWeb
+namespace Sample.Core
 {
     public class User : FullEntity<long, long>
     {

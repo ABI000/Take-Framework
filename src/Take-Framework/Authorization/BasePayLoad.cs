@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using System.Net.Http;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 
 namespace TakeFramework.Authorization
 {

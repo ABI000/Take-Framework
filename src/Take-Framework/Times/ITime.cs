@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TakeFramework.Time
+namespace TakeFramework.Times
 {
     public interface ITime
     {

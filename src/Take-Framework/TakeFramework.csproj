@@ -8,16 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Authorization\BasePayLoad.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authorization\" />
     <Folder Include="Domain\Uow\" />
     <Folder Include="Orm\" />
     <Folder Include="Json\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

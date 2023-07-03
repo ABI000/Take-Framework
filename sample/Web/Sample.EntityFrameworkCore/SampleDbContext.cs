@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Sample.Core;
 using TakeFramework.EntityFrameworkCore;
 
-namespace SampleWeb
+namespace Sample.EntityFrameworkCore
 {
     public class SampleDbContext : DbContext, IDbContextProvider<SampleDbContext>
     {
