@@ -1,0 +1,41 @@
+﻿@page "/userList"
+@using Sample.Server.Contracts;
+@inject HttpClient Http
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (userList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in userList)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private UserDto[]? userList;
+    protected override async Task OnInitializedAsync()
+    {
+        userList = await Http.GetFromJsonAsync<UserDto[]>("User/userlist");
+    }
+
+}

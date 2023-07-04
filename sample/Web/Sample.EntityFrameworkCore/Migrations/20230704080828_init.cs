@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace SampleWeb.Migrations
+namespace Sample.EntityFrameworkCore.Migrations
 {
     /// <inheritdoc />
     public partial class init : Migration
@@ -15,14 +15,13 @@ namespace SampleWeb.Migrations
                 name: "User",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedBy = table.Column<long>(type: "bigint", nullable: false),
-                    Modified = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ModifiedBy = table.Column<long>(type: "bigint", nullable: false),
                     Deleted = table.Column<bool>(type: "bit", nullable: false),
-                    Delete = table.Column<bool>(type: "bit", nullable: false),
                     DeleteTime = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DeleteBy = table.Column<long>(type: "bigint", nullable: false)
                 },

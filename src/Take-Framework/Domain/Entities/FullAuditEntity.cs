@@ -1,12 +1,7 @@
 ﻿namespace TakeFramework.Domain.Entities
 {
-    public class FullEntity<TPrimaryKey, TUserId> : AuditEntity<TPrimaryKey, TUserId>, IEntity<TPrimaryKey>, ISoftDelete
+    public class FullEntity<TPrimaryKey, TUserId> : ModifiedAuditEntity<TPrimaryKey, TUserId>, IEntity<TPrimaryKey>, ISoftDelete
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool Delete { get; set; }
-
         /// <summary>
         /// 
         /// </summary>
@@ -21,9 +16,9 @@
         /// 
         /// </summary>
         /// <param name="userId"></param>
-        public void SoftDelete(TUserId userId)
+        public virtual void InIitSoftDelete(TUserId userId)
         {
-            this.Delete = true;
+            InIitSoftDelete();
             this.DeleteTime = DateTime.Now;
             this.DeleteBy = userId;
         }

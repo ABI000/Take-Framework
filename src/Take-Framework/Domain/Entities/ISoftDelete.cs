@@ -8,6 +8,6 @@ namespace TakeFramework.Domain.Entities
 {
     public interface ISoftDelete
     {
-        bool Delete { get; set; }
+        bool Deleted { get; set; }
     }
 }

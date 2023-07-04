@@ -8,7 +8,7 @@ using Sample.EntityFrameworkCore;
 
 #nullable disable
 
-namespace SampleWeb.Migrations
+namespace Sample.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(SampleDbContext))]
     partial class SampleDbContextModelSnapshot : ModelSnapshot
@@ -17,27 +17,21 @@ namespace SampleWeb.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SampleWeb.User", b =>
+            modelBuilder.Entity("Sample.Core.User", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Delete")
-                        .HasColumnType("bit");
 
                     b.Property<long>("DeleteBy")
                         .HasColumnType("bigint");
@@ -48,11 +42,15 @@ namespace SampleWeb.Migrations
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Modified")
+                    b.Property<DateTime?>("Modified")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("ModifiedBy")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

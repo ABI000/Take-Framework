@@ -6,7 +6,7 @@ using TakeFramework.AutoMapper;
 using TakeFramework.Domain.Repositories;
 using TakeFramework.Domain.Services;
 using TakeFramework.EntityFrameworkCore;
-
+using TakeFramework.Web.Middleware;
 namespace Sample.Host.Shared
 {
     public static class HostConfiguration
@@ -17,10 +17,12 @@ namespace Sample.Host.Shared
             services.AddService();
             services.AddRepository();
             services.AddTakeFrameworkDbContext<SampleDbContext>(configuration);
+            services.AddErorrMiddleware();
             return services;
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)
         {
+            app.UseErorrMiddleware();
             return app;
         }
     }

@@ -1,6 +1,6 @@
 ﻿namespace TakeFramework.Domain.Entities
 {
-    public class CreateAuditEntity<TPrimaryKey,TUserId> : BaseEntity<TPrimaryKey>, IEntity
+    public class CreateAuditEntity<TPrimaryKey, TUserId> : BaseEntity<TPrimaryKey>, IEntity
     {
         /// <summary>
         /// 
@@ -12,7 +12,7 @@
         public TUserId CreatedBy { get; set; }
 
 
-        public void InInt(TUserId userId)
+        public virtual void InIit(TUserId userId)
         {
             CreatedBy = userId;
             Created = DateTime.Now;

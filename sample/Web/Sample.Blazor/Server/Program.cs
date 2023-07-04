@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.ResponseCompression;
-
+using Sample.Host.Shared;
+using TakeFramework.Swagger;
 namespace SampleBlazor
 {
     public class Program
@@ -12,12 +12,15 @@ namespace SampleBlazor
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
+            builder.Services.AddSwagger(builder.Configuration);
 
+            builder.Services.AddHostConfiguration(builder.Configuration);
             var app = builder.Build();
-
+            app.UseHostConfiguration(builder.Configuration);
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger(builder.Configuration);
                 app.UseWebAssemblyDebugging();
             }
             else

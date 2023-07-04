@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\TakeFramework.Web\TakeFramework.Web.csproj" />
     <ProjectReference Include="..\Sample.Server\Sample.Server.csproj" />
   </ItemGroup>
 
