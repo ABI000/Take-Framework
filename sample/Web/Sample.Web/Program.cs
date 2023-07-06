@@ -13,7 +13,7 @@ namespace Sample.Web
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddSwagger(builder.Configuration);
-
+            builder.Services.AddMemoryCache();
             builder.Services.AddHostConfiguration(builder.Configuration);
 
             var app = builder.Build();
@@ -24,6 +24,7 @@ namespace Sample.Web
             {
                 app.UseSwagger(builder.Configuration);
             }
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
             app.Run();

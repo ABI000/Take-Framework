@@ -7,12 +7,15 @@ using TakeFramework.Domain.Repositories;
 using TakeFramework.Domain.Services;
 using TakeFramework.EntityFrameworkCore;
 using TakeFramework.Web.Middleware;
+using TakeFramework.Cache;
+
 namespace Sample.Host.Shared
 {
     public static class HostConfiguration
     {
         public static IServiceCollection AddHostConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddCache(configuration);
             services.AddAutoMapper();
             services.AddService();
             services.AddRepository();

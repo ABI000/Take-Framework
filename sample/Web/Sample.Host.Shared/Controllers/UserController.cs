@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Sample.Core;
 using Sample.Server;
 using Sample.Server.Contracts;
+using TakeFramework.Exceptions;
 
 namespace Sample.Host.Shared.Controllers
 {
@@ -29,8 +30,7 @@ namespace Sample.Host.Shared.Controllers
         [HttpGet("GetException")]
         public string GetException()
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();            
         }
     }
-
 }
