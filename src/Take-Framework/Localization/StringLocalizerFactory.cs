@@ -13,7 +13,7 @@ namespace TakeFramework.Localization
         /// </summary>
         public StringLocalizerFactory(IEnumerable<ITakeFrameworkStringLocalizer> descriptors, IOptions<LocalizationOptions> options)
         {
-            ITakeFrameworkStringLocalizer? takeFrameworkStringLocalizer = descriptors.FirstOrDefault(x => x.Tag.Equals(options.Value.StorageType)) ?? throw new ArgumentNullException(nameof(IStringLocalizer));
+            ITakeFrameworkStringLocalizer? takeFrameworkStringLocalizer = descriptors.FirstOrDefault(x => x.StorageType.Equals(options.Value.StorageType)) ?? throw new ArgumentNullException(nameof(IStringLocalizer));
             _localizedStrings = takeFrameworkStringLocalizer;
         }
 

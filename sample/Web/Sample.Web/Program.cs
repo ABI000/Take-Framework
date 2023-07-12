@@ -1,13 +1,36 @@
 
-using TakeFramework.Swagger;
 using Sample.Host.Shared;
+using Serilog;
+using Serilog.Events;
+using TakeFramework.Swagger;
+
 namespace Sample.Web
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task<int> Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+#if DEBUG
+     .MinimumLevel.Debug()
+#else
+            .MinimumLevel.Information()
+#endif
+     .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+     .MinimumLevel.Override("Microsoft.EntityFrameworkCore", LogEventLevel.Warning)
+     .Enrich.FromLogContext()
+     .WriteTo.Async(c => c.File("Logs/logs.txt"))
+     .WriteTo.Async(c => c.Console())
+     .CreateLogger();
+
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, services, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext()
+                .WriteTo.Console());
+
             builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
@@ -17,6 +40,9 @@ namespace Sample.Web
             builder.Services.AddHostConfiguration(builder.Configuration);
 
             var app = builder.Build();
+
+            app.UseSerilogRequestLogging();
+
 
             app.UseHostConfiguration(builder.Configuration);
 
@@ -28,6 +54,7 @@ namespace Sample.Web
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
+            return 0;
         }
     }
 }

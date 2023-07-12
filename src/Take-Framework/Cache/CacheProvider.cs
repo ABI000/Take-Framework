@@ -162,7 +162,7 @@ namespace TakeFramework.Cache
 
         public T Get<T>(string key)
         {
-            throw new NotImplementedException();
+            return (T)memoryCache.Get(key);
         }
 
         public Task<IDictionary<string, T>> GetAsync<T>(IEnumerable<string> keys)

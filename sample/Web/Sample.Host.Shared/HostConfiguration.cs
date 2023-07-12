@@ -8,9 +8,11 @@ using TakeFramework.Domain.Services;
 using TakeFramework.EntityFrameworkCore;
 using TakeFramework.Web.Middleware;
 using TakeFramework.Cache;
+using TakeFramework.Localization;
 
 namespace Sample.Host.Shared
 {
+
     public static class HostConfiguration
     {
         public static IServiceCollection AddHostConfiguration(this IServiceCollection services, IConfiguration configuration)
@@ -21,10 +23,12 @@ namespace Sample.Host.Shared
             services.AddRepository();
             services.AddTakeFrameworkDbContext<SampleDbContext>(configuration);
             services.AddErorrMiddleware();
+            services.AddLocalization(configuration);
             return services;
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)
         {
+            app.UseLocalization(configuration);
             app.UseErorrMiddleware();
             return app;
         }

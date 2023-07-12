@@ -1,18 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Net.Http.Json;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using TakeFramework.Exceptions;
 using TakeFramework.Web;
-
+using TakeFramework.Localization;
 namespace TakeFramework.Middleware
 {
     public class ErorrMiddleware : IMiddleware
     {
-
-        public ErorrMiddleware()
+        private readonly ILogger logger;
+        public ErorrMiddleware(ILogger<ErorrMiddleware> logger)
         {
-
+            this.logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
@@ -20,23 +19,21 @@ namespace TakeFramework.Middleware
             try
             {
                 await next(context);
-
             }
             catch (BusinessException e)
             {
                 await LocalizationExceptionResponseWriteAsync(context, e.Msg, e.Code);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                //if (1 == 1)
-                //{
+                var msg = $"{context.Request.Scheme} {context.Request.Method} {context.Request.Path}{Environment.NewLine}错误信息{ex.Message}{Environment.NewLine}错误追踪:{ex.StackTrace}";
+                logger.LogError(msg);
+#if DEBUG
+                await ExceptionResponseWriteAsync(context, msg, "ServerErorr");
+#else
+                await LocalizationExceptionResponseWriteAsync(context, "ServerErorr", "ServerErorr");
+#endif
 
-                //    await LocalizationExceptionResponseWriteAsync(context, "ServerErorr", "ServerErorr");
-                //}
-                //else
-                //{
-                await ExceptionResponseWriteAsync(context, e.Message, "ServerErorr");
-                //}
             }
         }
         /// <summary>
@@ -48,7 +45,7 @@ namespace TakeFramework.Middleware
         /// <returns></returns>
         public async Task LocalizationExceptionResponseWriteAsync(HttpContext context, string msg, string code)
         {
-            await ExceptionResponseWriteAsync(context, msg, code);
+            await ExceptionResponseWriteAsync(context, LocalizationHelper.L(msg), code);
         }
         /// <summary>
         /// 报错返回
@@ -61,9 +58,12 @@ namespace TakeFramework.Middleware
         {
             context.Response.ContentType = "application/json;charset=utf-8";
             context.Response.StatusCode = 500;
-            await context.Response.Body.WriteAsync(JsonSerializer.SerializeToUtf8Bytes(new ApiResponse(msg, code)));
+            await context.Response.Body.WriteAsync(GetApiResponse(msg, code));
         }
-
+        private byte[] GetApiResponse(string msg, string code)
+        {
+            return JsonSerializer.SerializeToUtf8Bytes(new ApiResponse(msg, code));
+        }
     }
 
 }

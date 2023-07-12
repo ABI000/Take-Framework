@@ -17,6 +17,9 @@ namespace TakeFramework.Localization
         /// 本地化存储位置
         /// </summary>
         public string? Storage { get; set; }
-
+        /// <summary>
+        /// 默认语言code
+        /// </summary>
+        public string DefaultLanguageCode { get; set; } = "en-US";
     }
 }

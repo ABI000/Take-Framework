@@ -21,7 +21,7 @@ namespace TakeFramework.Exceptions
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="code"></param>
-        public BusinessException(string msg, string code)
+        public BusinessException(string msg, string code = "BusinessError")
         {
             this.Msg = msg;
             this.Code = code;
