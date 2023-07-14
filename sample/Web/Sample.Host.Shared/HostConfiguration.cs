@@ -2,13 +2,15 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sample.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using TakeFramework.AutoMapper;
+using TakeFramework.Cache;
 using TakeFramework.Domain.Repositories;
 using TakeFramework.Domain.Services;
 using TakeFramework.EntityFrameworkCore;
-using TakeFramework.Web.Middleware;
-using TakeFramework.Cache;
+using TakeFramework.Json;
 using TakeFramework.Localization;
+using TakeFramework.Web.Middleware;
 
 namespace Sample.Host.Shared
 {
@@ -17,6 +19,8 @@ namespace Sample.Host.Shared
     {
         public static IServiceCollection AddHostConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHealthChecks();
+            services.AddHttpContextAccessor();
             services.AddCache(configuration);
             services.AddAutoMapper();
             services.AddService();
@@ -24,6 +28,15 @@ namespace Sample.Host.Shared
             services.AddTakeFrameworkDbContext<SampleDbContext>(configuration);
             services.AddErorrMiddleware();
             services.AddLocalization(configuration);
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                options.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;                
+                options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());//日期时间
+                options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetConverter()); 
+                options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
+            });
             return services;
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)

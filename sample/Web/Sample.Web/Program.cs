@@ -31,7 +31,6 @@ namespace Sample.Web
                 .Enrich.FromLogContext()
                 .WriteTo.Console());
 
-            builder.Services.AddControllers();
 
             builder.Services.AddEndpointsApiExplorer();
 

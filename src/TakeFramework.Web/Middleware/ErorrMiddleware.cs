@@ -20,21 +20,36 @@ namespace TakeFramework.Middleware
             {
                 await next(context);
             }
+            catch (JsonException e)
+            {
+                await SystemErrorAsync(context, e, "JsonError");
+            }
             catch (BusinessException e)
             {
-                await LocalizationExceptionResponseWriteAsync(context, e.Msg, e.Code);
+                GetErrorMsg(context, e);
+                await LocalizationExceptionResponseWriteAsync(context, e.Message, e.Code);
             }
             catch (Exception ex)
             {
-                var msg = $"{context.Request.Scheme} {context.Request.Method} {context.Request.Path}{Environment.NewLine}错误信息{ex.Message}{Environment.NewLine}错误追踪:{ex.StackTrace}";
-                logger.LogError(msg);
-#if DEBUG
-                await ExceptionResponseWriteAsync(context, msg, "ServerErorr");
-#else
-                await LocalizationExceptionResponseWriteAsync(context, "ServerErorr", "ServerErorr");
-#endif
+                await SystemErrorAsync(context, ex, "ServerErorr");
 
             }
+        }
+
+        private async Task SystemErrorAsync(HttpContext context, Exception ex, string code)
+        {
+            var msg = GetErrorMsg(context, ex);
+#if DEBUG
+            await ExceptionResponseWriteAsync(context, msg, code);
+#else
+            await LocalizationExceptionResponseWriteAsync(context, "ServerErorr", code);
+#endif
+        }
+        private string GetErrorMsg(HttpContext context, Exception ex)
+        {
+            var msg = $"{context.Request.Scheme} {context.Request.Method} {context.Request.Path}{Environment.NewLine}错误信息{ex.Message}{Environment.NewLine}错误追踪:{ex.StackTrace}";
+            logger.LogError(msg);
+            return msg;
         }
         /// <summary>
         /// 本地化报错返回

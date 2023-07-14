@@ -14,16 +14,16 @@ namespace TakeFramework.Exceptions
     {
         public string Code { get; set; }
 
-        public string Msg { get; set; }
+        public override string Message { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="code"></param>
-        public BusinessException(string msg, string code = "BusinessError")
+        public BusinessException(string message, string code = "BusinessError")
         {
-            this.Msg = msg;
+            this.Message = message;
             this.Code = code;
         }
     }

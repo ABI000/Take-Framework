@@ -48,6 +48,28 @@ namespace Sample.Host.Shared.Controllers
             }
             return new ApiResponse<string>(output.ToString());
         }
+        [HttpGet("GetApiResponse")]
+        public ApiResponse GetApiResponse()
+        {
+            return new ApiResponse<TestApiResponse>(new TestApiResponse());
+        }
+        [HttpPost("PostApiResponse")]
+        public ApiResponse PostApiResponse(TestApiResponse intput)
+        {
+            return new ApiResponse<TestApiResponse>(intput);
+        }
+    }
+    public class TestApiResponse
+    {
+        public DateTimeOffset DateTimeOffset { get; set; } = DateTimeOffset.MinValue;
+        public DateTime DateTime { get; set; } = DateTime.Now;
+        public string Name { get; set; } = "Test";
+        public string? NullName { get; set; } = null;
+        public int IntNmb { get; set; } = 1;
+        public decimal Decimal { get; set; } = 231.123M;
+        public double Double { get; set; } = 123.1231123;
+        public long Long { get; set; } = 123456789012345;
+        public float Float { get; set; } = 123.1231123F;
     }
 
 }

@@ -15,7 +15,6 @@
     <Folder Include="Authorization\" />
     <Folder Include="Domain\Uow\" />
     <Folder Include="Orm\" />
-    <Folder Include="Json\" />
   </ItemGroup>
 
   <ItemGroup>

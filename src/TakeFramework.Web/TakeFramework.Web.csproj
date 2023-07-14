@@ -16,4 +16,8 @@
     <ProjectReference Include="..\TakeFramework.Serilog\TakeFramework.Serilog.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mvc\Formatters\" />
+  </ItemGroup>
+
 </Project>
