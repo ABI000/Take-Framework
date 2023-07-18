@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Authorization\BasePayLoad.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Authorization\" />
     <Folder Include="Domain\Uow\" />
     <Folder Include="Orm\" />
   </ItemGroup>

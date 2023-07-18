@@ -9,7 +9,11 @@ using TakeFramework.Domain.Repositories;
 using TakeFramework.Domain.Services;
 using TakeFramework.EntityFrameworkCore;
 using TakeFramework.Json;
+using TakeFramework.JWT;
 using TakeFramework.Localization;
+using TakeFramework.Web;
+using TakeFramework.Web.Authentication;
+using TakeFramework.Web.Authorization;
 using TakeFramework.Web.Middleware;
 
 namespace Sample.Host.Shared
@@ -37,6 +41,12 @@ namespace Sample.Host.Shared
                 options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetConverter()); 
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
+
+            services.AddJwt(configuration);
+            services.AddTFAuthentication();
+
+            services.AddTFAuthorization();
+
             return services;
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)

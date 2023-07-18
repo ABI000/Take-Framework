@@ -22,7 +22,7 @@ namespace TakeFramework.Swagger
                     Type = OpenApiSecuritySchemeType.Http,
                     Scheme = "bearer"
                 });
-                config.TypeMappers.Add(new ObjectTypeMapper(typeof(long), new NJsonSchema.JsonSchema
+                config.TypeMappers.Add(new ObjectTypeMapper(typeof(long), new JsonSchema
                 {
                     Type = JsonObjectType.String
                 }));

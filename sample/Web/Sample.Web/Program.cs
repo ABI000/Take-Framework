@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Sample.Host.Shared;
 using Serilog;
 using Serilog.Events;
@@ -33,6 +34,12 @@ namespace Sample.Web
 
 
             builder.Services.AddEndpointsApiExplorer();
+
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options));
+
+
 
             builder.Services.AddSwagger(builder.Configuration);
             builder.Services.AddMemoryCache();

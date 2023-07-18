@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using TakeFramework.Exceptions;
-using TakeFramework.Web;
-using TakeFramework.Localization;
-namespace TakeFramework.Middleware
+
+namespace TakeFramework.Web.Middleware
 {
     public class ErorrMiddleware : IMiddleware
     {

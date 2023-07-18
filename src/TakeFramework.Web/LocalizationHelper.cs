@@ -4,8 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using TakeFramework.Localization;
 
-namespace TakeFramework.Localization
+namespace TakeFramework.Web
 {
     public static class LocalizationHelper
     {
@@ -30,7 +31,7 @@ namespace TakeFramework.Localization
 
             RequestLocalizationOptions options = new()
             {
-                DefaultRequestCulture = new RequestCulture(configuration.GetSection(LocalizationOptions.Position).GetValue<string>("DefaultLanguageCode")!),
+                DefaultRequestCulture = new RequestCulture(configuration.GetSection(Localization.LocalizationOptions.Position).GetValue<string>("DefaultLanguageCode")!),
                 SupportedCultures = supportedCultures,
                 SupportedUICultures = supportedCultures
             };

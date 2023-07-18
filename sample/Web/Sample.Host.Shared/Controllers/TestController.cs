@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Sample.Server;
@@ -57,6 +58,18 @@ namespace Sample.Host.Shared.Controllers
         public ApiResponse PostApiResponse(TestApiResponse intput)
         {
             return new ApiResponse<TestApiResponse>(intput);
+        }
+        [AllowAnonymous]
+        [HttpGet("GetJWTToken")]
+        public async Task<ApiResponse> GetJWTToken()
+        {
+            return new ApiResponse<string>(await testService.GenerateTokenAsync());
+        }
+        [Authorize]
+        [HttpGet("GetAuthorization")]
+        public ApiResponse GetAuthorization()
+        {
+            return new ApiResponse<string>("ok");
         }
     }
     public class TestApiResponse

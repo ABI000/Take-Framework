@@ -1,6 +1,6 @@
 using Sample.Host.Shared;
 using TakeFramework.Swagger;
-namespace SampleBlazor
+namespace SampleBlazor.Server
 {
     public class Program
     {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TakeFramework.AutoMapper;
 
-namespace TakeFramework.AutoMapper
+namespace TakeFramework.Serilog
 {
     public static class ServiceCollectionExtensions
     {

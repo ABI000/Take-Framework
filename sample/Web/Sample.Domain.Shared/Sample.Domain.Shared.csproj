@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\TakeFramework.JWT\TakeFramework.JWT.csproj" />
+  </ItemGroup>
+
 </Project>
