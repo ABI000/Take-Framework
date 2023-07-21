@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TakeFramework.Tree
+namespace TakeFramework.Trees
 {
     /*
      * NodeId不为空，但是ParentId可为空
@@ -15,41 +15,41 @@ namespace TakeFramework.Tree
     /// 请使用引用类型
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITree<T, U> : ITree
-            where U : class
+    public interface ITree<PrimaryKey, T> : ITree
+            where T : class
     {
         /// <summary>
         /// 节点id
         /// </summary>
-        public U Id { get; set; }
+        public PrimaryKey Id { get; set; }
 
         /// <summary>
         /// 父级节点id
         /// </summary>
-        public U ParentId { get; set; }
+        public PrimaryKey? ParentId { get; set; }
 
         /// <summary>
         /// 子节点
         /// </summary>
-        public List<T> ChildList { get; set; }
+        public List<T>? ChildList { get; set; }
     }
     /// <summary>
     /// 请使用值类型
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="U"></typeparam>
-    public interface ITreeValueType<T, U> : ITree
-            where U : struct
+    public interface ITreeValueType<PrimaryKey, T> : ITree
+            where T : struct
     {
         /// <summary>
         /// 节点id
         /// </summary>
-        public U Id { get; set; }
+        public PrimaryKey Id { get; set; }
 
         /// <summary>
         /// 父级节点id
         /// </summary>
-        public U? ParentId { get; set; }
+        public PrimaryKey? ParentId { get; set; }
 
         /// <summary>
         /// 子节点

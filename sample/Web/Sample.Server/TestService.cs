@@ -20,5 +20,22 @@ namespace Sample.Server
         {
             return mapper.Map<List<User>, List<UserDto>>(rpository.List());
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public TreeO GetTreeO()
+        {
+            var output = new TreeO();
+
+            output.GenerateTree(new List<TreeO>
+            {
+                 new TreeO() { Id="0"},
+                 new TreeO() { Id="1",ParentId="0"},
+                 new TreeO() { Id="2",ParentId="1"}
+            });
+            output.ChildList.ToList();
+            return output;
+        }
     }
 }
