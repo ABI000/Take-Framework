@@ -6,7 +6,7 @@ namespace Sample.Domain
 {
     public class UserRepository : EFCoreRepository<User, long, SampleDbContext>
     {
-        public UserRepository(IDbContextProvider<SampleDbContext> dbContextProvider) : base(dbContextProvider)
+        public UserRepository(IEnumerable<IDbContextProvider> dbContextProvider) : base(dbContextProvider)
         {
         }
     }

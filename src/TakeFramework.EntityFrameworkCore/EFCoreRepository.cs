@@ -12,9 +12,9 @@ namespace TakeFramework.EntityFrameworkCore
         public readonly DbContext dbContext;
         public readonly DbSet<T> dbset;
 
-        public EFCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
+        public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders)
         {
-            this.dbContext = dbContextProvider.GetDbContext();
+            this.dbContext = (DbContext)dbContextProviders.FirstOrDefault(x => x.GetType().Equals(typeof(TDbContext)));//.GetDbContext();
             if (dbContext == null)
             {
                 throw new ArgumentNullException("dbContext is null");
@@ -31,7 +31,7 @@ namespace TakeFramework.EntityFrameworkCore
         public override void Delete(T intput)
         {
             dbset.Remove(intput);
-            dbContext.SaveChanges();
+            //dbContext.SaveChanges();
         }
 
         public override List<T> List()
@@ -42,7 +42,7 @@ namespace TakeFramework.EntityFrameworkCore
         public override T Update(T intput)
         {
             dbset.Update(intput);
-            dbContext.SaveChanges();
+            //dbContext.SaveChanges();
             return intput;
         }
     }

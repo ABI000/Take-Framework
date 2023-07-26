@@ -13,6 +13,7 @@ namespace TakeFramework.Domain.Repositories
     {
 
         public abstract T Create(T intput);
+
         public void Create(List<T> intput)
         {
             throw new NotImplementedException();

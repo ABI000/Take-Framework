@@ -5,14 +5,14 @@ using TakeFramework.EntityFrameworkCore;
 
 namespace Sample.EntityFrameworkCore
 {
-    public class SampleDbContext : BaseDbContext<SampleDbContext>, IDbContextProvider<SampleDbContext>
+    public class Sample2DbContext : BaseDbContext<Sample2DbContext>, IDbContextProvider<Sample2DbContext>
     {
-        public override SampleDbContext GetDbContext()
+        public override Sample2DbContext GetDbContext()
         {
             return this;
         }
         private readonly DBSetting _dBSettings;
-        public SampleDbContext(IOptions<DBSettings> dBSettings)
+        public Sample2DbContext(IOptions<DBSettings> dBSettings)
         {
             _dBSettings = dBSettings.Value.DBSettingList.FirstOrDefault(x => x.Name == Name);
         }
@@ -23,6 +23,6 @@ namespace Sample.EntityFrameworkCore
         }
         public DbSet<User> User { get; set; }
 
-        public override string Name => "Sample";
+        public override string Name => "Sample2";
     }
 }

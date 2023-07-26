@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Web", "src\Ta
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Serilog", "src\TakeFramework.Serilog\TakeFramework.Serilog.csproj", "{28195724-3363-4B6A-BBF1-A1CAC442A9C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.JWT", "src\TakeFramework.JWT\TakeFramework.JWT.csproj", "{29B03C32-7EA0-47DD-8FD4-A80787FA760F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.JWT", "src\TakeFramework.JWT\TakeFramework.JWT.csproj", "{29B03C32-7EA0-47DD-8FD4-A80787FA760F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

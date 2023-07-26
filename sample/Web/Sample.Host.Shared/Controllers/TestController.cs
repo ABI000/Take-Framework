@@ -24,7 +24,12 @@ namespace Sample.Host.Shared.Controllers
                 new KeyValuePair<string, string>("ServerError", "·þÎñ´íÎó")
             });
         }
-
+        [HttpPost("CreateUser")]
+        public async Task<ApiResponse> CreateAsync(UserDto userDto)
+        {
+            await testService.CreateAsync(userDto);
+            return new ApiResponse<string>("ok");
+        }
 
         [HttpGet("userList")]
         public IEnumerable<UserDto> userList()
@@ -71,6 +76,7 @@ namespace Sample.Host.Shared.Controllers
         {
             return new ApiResponse<string>("ok");
         }
+
     }
     public class TestApiResponse
     {

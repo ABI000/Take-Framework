@@ -129,6 +129,12 @@ namespace TakeFramework.Trees
             }
             return null;
         }
+
+        public Tree<PrimaryKey> GenerateTree(IEnumerable<Tree<PrimaryKey>> source)
+        {
+            return TreeHelper.GenerateTree(source);
+        }
+
     }
 
 

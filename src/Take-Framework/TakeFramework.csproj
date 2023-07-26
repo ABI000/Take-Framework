@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Uow\" />
-    <Folder Include="Orm\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Metalama.Extensions.DependencyInjection" Version="2023.1.10" />
+    <PackageReference Include="Metalama.Framework" Version="2023.1.10" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />

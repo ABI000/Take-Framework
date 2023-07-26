@@ -9,6 +9,7 @@ namespace Sample.Server
         public UserProfile()
         {
             CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
         }
     }
 }
