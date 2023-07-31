@@ -9,8 +9,8 @@ namespace TakeFramework.EntityFrameworkCore
          where T : BaseEntity<TPrimaryKey>, new()
         where TDbContext : DbContext
     {
-        public readonly DbContext dbContext;
-        public readonly DbSet<T> dbset;
+        protected readonly DbContext dbContext;
+        protected readonly DbSet<T> dbset;
 
         public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders)
         {

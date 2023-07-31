@@ -2,13 +2,15 @@
 
 namespace TakeFramework.EntityFrameworkCore
 {
-    public abstract class BaseDbContext<TDbContext> : DbContext, IDbContextProvider<TDbContext>
+    public abstract class BaseDbContext<TDbContext> : DbContext, IDbContextProvider
         where TDbContext : DbContext
     {
         public abstract string Name { get; }
-
         public abstract TDbContext GetDbContext();
+        public virtual Task<TDbContext> GetDbContextAsync()
+        {
 
-        public Task<TDbContext> GetDbContextAsync() => Task.FromResult(GetDbContext());
+            return Task.FromResult(GetDbContext());
+        }
     }
 }

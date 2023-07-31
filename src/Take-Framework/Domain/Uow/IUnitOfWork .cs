@@ -1,10 +1,10 @@
 ﻿namespace TakeFramework.Domain.Uow
 {
-    public interface IUnitOfWork//: IDisposable
+    public interface IUnitOfWork : IDisposable
     {
-        void BeginTransaction();
-        void Commit();
-        void Rollback();
-        //void SaveChanges();
+        bool HasActiveTransaction { get; set; }
+        void BeginTransaction(string? name = null);
+        void Commit(string? name = null);
+        void Rollback(string? name = null);
     }
 }

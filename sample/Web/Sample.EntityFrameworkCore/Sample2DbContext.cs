@@ -5,7 +5,7 @@ using TakeFramework.EntityFrameworkCore;
 
 namespace Sample.EntityFrameworkCore
 {
-    public class Sample2DbContext : BaseDbContext<Sample2DbContext>, IDbContextProvider<Sample2DbContext>
+    public class Sample2DbContext : BaseDbContext<Sample2DbContext>, IDbContextProvider
     {
         public override Sample2DbContext GetDbContext()
         {
@@ -21,6 +21,9 @@ namespace Sample.EntityFrameworkCore
         {
             optionsBuilder.UseSqlServer(_dBSettings.ConnectionString);
         }
+
+        
+
         public DbSet<User> User { get; set; }
 
         public override string Name => "Sample2";
