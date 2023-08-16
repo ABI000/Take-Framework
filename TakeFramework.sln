@@ -49,6 +49,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Serilog", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.JWT", "src\TakeFramework.JWT\TakeFramework.JWT.csproj", "{29B03C32-7EA0-47DD-8FD4-A80787FA760F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{EE547B8B-D395-44B4-83E3-95D14B64470D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{9B20E499-FE08-46BD-84BE-385BD3A33869}"
+	ProjectSection(SolutionItems) = preProject
+		tools\nuget\push.bat = tools\nuget\push.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -152,6 +159,7 @@ Global
 		{ACE0B5C1-BACD-4183-9B88-F292FF47946A} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
 		{28195724-3363-4B6A-BBF1-A1CAC442A9C0} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
 		{29B03C32-7EA0-47DD-8FD4-A80787FA760F} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
+		{9B20E499-FE08-46BD-84BE-385BD3A33869} = {EE547B8B-D395-44B4-83E3-95D14B64470D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9898B24-2CA0-4C13-BE85-581DC968AE74}
