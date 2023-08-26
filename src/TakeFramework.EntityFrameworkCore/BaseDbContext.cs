@@ -9,7 +9,6 @@ namespace TakeFramework.EntityFrameworkCore
         public abstract TDbContext GetDbContext();
         public virtual Task<TDbContext> GetDbContextAsync()
         {
-
             return Task.FromResult(GetDbContext());
         }
     }

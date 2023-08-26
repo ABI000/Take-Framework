@@ -1,8 +1,7 @@
 ﻿namespace TakeFramework.Domain.Entities
 {
-    public class ModifiedAuditEntity<TPrimaryKey, TUserId> : CreateAuditEntity<TPrimaryKey, TUserId>, IEntity, ISoftDelete, IModifiedAuditEntity<TUserId>
+    public interface IModifiedAuditEntity<TUserId>
     {
-
         /// <summary>
         /// 修改时间
         /// </summary>
@@ -12,10 +11,11 @@
         /// </summary>
         public TUserId? ModifiedBy { get; set; }
 
-        /// <summary>
-        /// 软删除
-        /// </summary>
-        public bool Deleted { get; set; }
 
+        public virtual void InIitModified(TUserId userId)
+        {
+            ModifiedBy = userId;
+            Modified = DateTime.Now;
+        }
     }
 }

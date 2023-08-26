@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TakeFramework.Domain.Entities
+﻿namespace TakeFramework.Domain.Entities
 {
     public interface ISoftDelete
     {
-        bool Deleted { get; set; }
+        public bool Deleted { get; set; }
+
+        public virtual void InIitSoftDelete()
+        {
+            Deleted = true;
+        }
     }
 }

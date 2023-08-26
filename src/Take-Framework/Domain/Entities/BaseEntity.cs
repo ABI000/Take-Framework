@@ -5,6 +5,6 @@
         /// <summary>
         /// 
         /// </summary>
-        public virtual TPrimaryKey Id { get; set; }
+        public virtual required TPrimaryKey Id { get; set; }
     }
 }

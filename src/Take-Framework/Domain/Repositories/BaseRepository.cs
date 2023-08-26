@@ -9,7 +9,7 @@ namespace TakeFramework.Domain.Repositories
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class BaseRepository<T, TPrimaryKey> : IBaseRepository<T, TPrimaryKey>
-        where T : BaseEntity<TPrimaryKey>, new()
+        where T : class, IEntity<TPrimaryKey>
     {
 
         public abstract T Create(T intput);

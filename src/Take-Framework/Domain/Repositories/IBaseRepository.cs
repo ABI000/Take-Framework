@@ -4,7 +4,7 @@ using TakeFramework.Domain.Entities;
 namespace TakeFramework.Domain.Repositories
 {
     public interface IBaseRepository<T, TPrimaryKey> : IBaseRepository
-        where T : BaseEntity<TPrimaryKey>
+        where T : class, IEntity<TPrimaryKey>
     {
 
         #region Task/async

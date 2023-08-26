@@ -1,15 +1,15 @@
 ﻿namespace TakeFramework.Domain.Entities
 {
-    public class CreateAuditEntity<TPrimaryKey, TUserId> : BaseEntity<TPrimaryKey>, IEntity, ICreateAuditEntity<TUserId>
+    public interface ICreateAuditEntity<TUserId>
     {
         /// <summary>
-        /// 
+        /// 创建时间
         /// </summary>
         public DateTime Created { get; set; }
         /// <summary>
-        /// 
+        /// 创建者
         /// </summary>
-        public required TUserId CreatedBy { get; set; }
+        public TUserId CreatedBy { get; set; }
 
 
         public virtual void InIit(TUserId userId)

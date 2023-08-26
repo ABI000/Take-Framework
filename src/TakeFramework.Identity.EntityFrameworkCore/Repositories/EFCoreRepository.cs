@@ -1,22 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
+using Microsoft.Extensions.Options;
 using TakeFramework.Domain.Entities;
 using TakeFramework.Domain.Repositories;
+using TakeFramework.EntityFrameworkCore;
 
-namespace TakeFramework.EntityFrameworkCore
+namespace TakeFramework.Identity.Repositories
 {
-    public class EFCoreRepository<T, TPrimaryKey, TDbContext> : BaseRepository<T, TPrimaryKey>, IBaseRepository<T, TPrimaryKey>
-         where T : BaseEntity<TPrimaryKey>, new()
-        where TDbContext : DbContext
+    public class EFCoreRepository<T, TPrimaryKey> : BaseRepository<T, TPrimaryKey>, IBaseRepository<T, TPrimaryKey>
+          where T : class, IEntity<TPrimaryKey>, new()
     {
         protected readonly DbContext dbContext;
         protected readonly DbSet<T> dbset;
 
-        public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders)
+        protected readonly IdentitySettings IdentitySettings;
+
+        public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders, IOptions<IdentitySettings> identitySettings)
         {
-            this.dbContext = (DbContext)(dbContextProviders.FirstOrDefault(x => x.GetType().Equals(typeof(TDbContext))) ?? throw new ArgumentNullException("dbContext is null"));
+            IdentitySettings = identitySettings.Value;
+            this.dbContext = (DbContext)(dbContextProviders.FirstOrDefault(x => x.Name == IdentitySettings.DBName) ?? throw new ArgumentNullException("dbContext is null"));
             this.dbset = dbContext.Set<T>();
+
         }
+
         public override T Create(T intput)
         {
             dbset.Add(intput);
@@ -39,4 +44,5 @@ namespace TakeFramework.EntityFrameworkCore
             return intput;
         }
     }
+
 }
