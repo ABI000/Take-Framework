@@ -1,9 +1,11 @@
-﻿using TakeFramework.Domain.Repositories;
-using TakeFramework.Identity.PO;
+﻿using TakeFramework.Domain.Entities;
+using TakeFramework.Domain.Repositories;
 
 namespace TakeFramework.Identity
 {
-    public interface IUserRepository: IBaseRepository<User, long>
+    public interface IUserRepository<TUser, TPrimaryKey> : IBaseRepository<TUser, TPrimaryKey>
+        where TUser : class, IEntity<TPrimaryKey>
     {
+
     }
 }

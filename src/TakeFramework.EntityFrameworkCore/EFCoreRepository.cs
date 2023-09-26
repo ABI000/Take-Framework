@@ -1,12 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using TakeFramework.Domain.Entities;
 using TakeFramework.Domain.Repositories;
 
 namespace TakeFramework.EntityFrameworkCore
 {
     public class EFCoreRepository<T, TPrimaryKey, TDbContext> : BaseRepository<T, TPrimaryKey>, IBaseRepository<T, TPrimaryKey>
-         where T : BaseEntity<TPrimaryKey>, new()
+         where T : BaseEntity<TPrimaryKey>
         where TDbContext : DbContext
     {
         protected readonly DbContext dbContext;

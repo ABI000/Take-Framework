@@ -41,6 +41,10 @@ namespace TakeFramework.Identity.Permission
         /// <param name="userName"></param>
         /// <returns></returns>
         Task<Dictionary<string, string>> GetUserClaimExcludeRoleByUserName(string userName);
+
+
+
+
         #endregion
 
         #region 角色

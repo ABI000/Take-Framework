@@ -13,4 +13,8 @@
         public TUserId? DeleteBy { get; set; }
 
     }
+    public class FullAuditEntity : FullAuditEntity<long, long>
+    {
+
+    }
 }

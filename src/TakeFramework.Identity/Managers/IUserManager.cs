@@ -1,8 +1,9 @@
 ﻿using TakeFramework.Identity.DTO;
 
-namespace TakeFramework.Identity
+namespace TakeFramework.Identity.Managers
 {
-    public interface IUserManager
+    public interface IUserManager<TUser,TUserDto>
+        where TUser : class
     {
         #region 查询
 
@@ -12,13 +13,13 @@ namespace TakeFramework.Identity
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task<UserDto?> GetUserByIdAsync(long id);
+        public Task<TUserDto?> GetUserByIdAsync(long id);
         /// <summary>
         /// 根据用户名查找用户
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public Task<UserDto?> GetUserByUserNameAsync(string userName);
+        public Task<TUserDto?> GetUserByUserNameAsync(string userName);
         #endregion
 
         #region  编辑
@@ -57,7 +58,7 @@ namespace TakeFramework.Identity
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Task LogOut(UserDto userDto);
+        public Task LogOut(TUserDto userDto);
 
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using TakeFramework.Identity.DTO;
 
-namespace TakeFramework.Identity
+namespace TakeFramework.Identity.Managers
 {
     public interface IRoleManager
     {

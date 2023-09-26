@@ -60,6 +60,7 @@ namespace Sample.Web
             app.UseAuthorization();
             app.MapControllers();
             app.Run();
+
             return 0;
         }
     }
