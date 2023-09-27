@@ -123,7 +123,7 @@ namespace TakeFramework.Trees
                 return Parent;
             }
             var foundNode = Parent.FindParentNode(Id);
-            if (foundNode != null)
+            if (foundNode is not null)
             {
                 return foundNode;
             }

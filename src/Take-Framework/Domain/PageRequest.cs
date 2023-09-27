@@ -21,6 +21,8 @@ namespace TakeFramework.Domain
         /// PageSize
         /// </summary>
         public virtual int PageSize { get; set; } = 10;
+
+        public int SikpCount => (PageIndex < 1 ? 1 : PageIndex) - 1 * PageSize;
     }
     /// <summary>
     /// 查询请求参数类
@@ -43,37 +45,20 @@ namespace TakeFramework.Domain
 
         public List<Condition> Conditions { get; set; } = new List<Condition>();
 
-        /// <summary>
-        /// IConditionalModel
-        /// </summary>
-        [JsonIgnore]
-        public List<IConditionalModel> ConditionalModels
+        public (string, object[] args)? GetSql()
         {
-            get
-            {
-                List<IConditionalModel> result = new List<IConditionalModel>();
-                if (Conditions.Any())
-                {
-                    Conditions.ForEach(f =>
-                    {
-                        IConditionalModel conditionalModel = new ConditionalModel
-                        {
-                            FieldName = f.FieldName,
-                            FieldValue = f.FieldValue,
-                            ConditionalType = f.ConditionalType
-                        };
-                        result.Add(conditionalModel);
-                    });
-                }
-                return result;
-            }
+            return !Conditions.Any() ? null : (string.Join(" and ", Conditions.Select(x => x.Sql)), Conditions.Select(x => x.FieldValue).ToArray());
+        }
+        public IEnumerable<(string, object)>? GetExpressions()
+        {
+            return Conditions.Select(x => (x.Expressions, (object)x.FieldValue));
         }
     }
 
     /// <summary>
     /// Condition
     /// </summary>
-    public class Condition : IConditionalModel
+    public class Condition
     {
         /// <summary>
         /// 字段名
@@ -108,7 +93,7 @@ namespace TakeFramework.Domain
             ConditionalType.LikeRight => $"{this.FieldName}.EndsWith(\"{this.FieldValue}\")",
             ConditionalType.NoEqual => $"{this.FieldName}!={this.FieldValue}",
             ConditionalType.IsNullOrEmpty => $"{this.FieldName}.IsNullOrEmpty(\"{this.FieldValue}\")",
-            ConditionalType.IsNot => $"{this.FieldName}!= null",
+            ConditionalType.IsNot => $"{this.FieldName} is not null",
             ConditionalType.NoLike => $"!{this.FieldName}.Contains(\"{this.FieldValue}\")",
 
             _ => string.Empty
@@ -137,9 +122,6 @@ namespace TakeFramework.Domain
             _ => string.Empty
         };
     }
-    public interface IConditionalModel
-    {
-    }
     public enum ConditionalType
     {
         Equal = 0,
@@ -160,26 +142,5 @@ namespace TakeFramework.Domain
         InLike = 15
     }
 
-    public class ConditionalModel : IConditionalModel
-    {
-        //public ConditionalModel();
 
-        public string FieldName { get; set; }
-        public string FieldValue { get; set; }
-        public string CSharpTypeName { get; set; }
-        //public ICustomConditionalFunc CustomConditionalFunc { get; set; }
-        public dynamic CustomParameterValue { get; set; }
-        public ConditionalType ConditionalType { get; set; }
-        [JsonIgnore]
-        public Func<string, object> FieldValueConvertFunc { get; set; }
-
-        public static List<IConditionalModel> Create(params IConditionalModel[] conditionalModel)
-        {
-            return new List<IConditionalModel>();
-        }
-    }
-    //public interface ICustomConditionalFunc
-    //{
-    //    KeyValuePair<string, SugarParameter[]> GetConditionalSql(ConditionalModel json, int index);
-    //}
 }
