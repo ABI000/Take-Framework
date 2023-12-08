@@ -4,16 +4,11 @@ using TakeFramework.Identity.PO;
 
 namespace TakeFramework.Identity.Managers
 {
-    public class UserManager<TUser, TUserDto, TPrimaryKey> : IUserManager<TUser, TUserDto>
+    public class UserManager<TUser, TUserDto, TPrimaryKey>(IUserRepository<TUser, TPrimaryKey> userRepository) : IUserManager<TUser, TUserDto>
         where TUser : User, IEntity<TPrimaryKey>
         where TUserDto : class, new()
     {
-        private readonly IUserRepository<TUser, TPrimaryKey> _userRepository;
-
-        public UserManager(IUserRepository<TUser, TPrimaryKey> userRepository)
-        {
-            _userRepository = userRepository;
-        }
+        private readonly IUserRepository<TUser, TPrimaryKey> _userRepository = userRepository;
 
         public Task ChangePassWord(ChangePassWordDto input)
         {

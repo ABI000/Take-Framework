@@ -5,12 +5,13 @@ namespace TakeFramework.Identity.PO
 {
     public class UserLogin : IdentityUserLogin<long>, IFullAuditEntity<long>, IEntity<long>
     {
-        public DateTime? DeleteTime { get ; set ; }
-        public long DeleteBy { get ; set ; }
-        public DateTime Created { get ; set ; }
-        public long CreatedBy { get ; set ; }
-        public DateTime? Modified { get ; set ; }
-        public long ModifiedBy { get ; set ; }
-        public bool Deleted { get ; set ; }
+        public DateTime? DeleteTime { get; set; }
+        public long DeleteBy { get; set; }
+        public DateTime Created { get; set; }
+        public long CreatedBy { get; set; }
+        public DateTime? Modified { get; set; }
+        public long ModifiedBy { get; set; }
+        public bool Deleted { get; set; }
+        public long Id { get; set; }
     }
 }

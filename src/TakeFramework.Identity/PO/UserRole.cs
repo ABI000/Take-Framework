@@ -12,5 +12,6 @@ namespace TakeFramework.Identity.PO
         public DateTime? Modified { get; set; }
         public long ModifiedBy { get; set; }
         public bool Deleted { get; set; }
+        public long Id { get; set; }
     }
 }

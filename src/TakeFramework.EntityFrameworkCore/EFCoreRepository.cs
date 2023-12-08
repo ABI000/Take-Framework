@@ -6,17 +6,24 @@ using TakeFramework.Domain.Repositories;
 
 namespace TakeFramework.EntityFrameworkCore
 {
+
     public class EFCoreRepository<T, TPrimaryKey, TDbContext> : BaseRepository<T, TPrimaryKey>, IBaseRepository<T, TPrimaryKey>
-         where T : BaseEntity<TPrimaryKey>
-        where TDbContext : DbContext
+             where T : class, IEntity<TPrimaryKey>, new()
+            where TDbContext : DbContext
     {
         protected readonly DbContext dbContext;
         protected readonly DbSet<T> dbset;
 
-        public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders)
+        protected readonly IQueryable<T> Queryable;
+        protected readonly EntityDictionary entityDictionary;
+        private readonly IEnumerable<IDbContextProvider> dbContextProviders;
+
+        public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders, EntityDictionary entityDictionary)
         {
+            this.entityDictionary = entityDictionary;
             this.dbContext = (DbContext)(dbContextProviders.FirstOrDefault(x => x.GetType().Equals(typeof(TDbContext))) ?? throw new ArgumentNullException("dbContext is null"));
             this.dbset = dbContext.Set<T>();
+            Queryable = dbset;
         }
 
         #region  create
@@ -116,36 +123,91 @@ namespace TakeFramework.EntityFrameworkCore
             return dbset.FirstOrDefaultAsync(predicate);
         }
 
-        public override List<T> List(bool isTracking = false)
+        public override List<T> List(Expression<Func<T, bool>>? predicate = null, bool isTracking = false)
         {
-            return isTracking ? dbset.ToList() : dbset.AsNoTracking().ToList();
+            return isTracking ? dbset.WhereIF(predicate is not null, predicate).ToList() : dbset.AsNoTracking().WhereIF(predicate is not null, predicate).ToList();
         }
 
-        public override List<T> List(Expression<Func<T, bool>> predicate, bool isTracking = false)
+        public override Task<List<T>> ListAsync(Expression<Func<T, bool>>? predicate = null, bool isTracking = false)
         {
-            return isTracking ? dbset.Where(predicate).ToList() : dbset.AsNoTracking().Where(predicate).ToList();
+            return isTracking ? dbset.WhereIF(predicate is not null, predicate).ToListAsync() : dbset.AsNoTracking().WhereIF(predicate is not null, predicate).ToListAsync();
         }
 
-        public override Task<List<T>> ListAsync(bool isTracking = false)
+        public override (List<T> data, int totalCount) PageList(PageRequest pageRequest, bool isTracking = false)
         {
-            return isTracking ? dbset.ToListAsync() : dbset.AsNoTracking().ToListAsync();
+            if (pageRequest.Conditions.Any())
+            {
+                var conditions = GetConditions(pageRequest.GetExpressions());
+                return (dbset.Where(conditions).OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize).ToList(), Count(conditions));
+            }
+            else
+            {
+                return (dbset.OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize).ToList(), Count());
+            }
         }
 
-        public override Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate, bool isTracking = false)
+        #region 条件转换
+
+
+        private Expression<Func<T, bool>> GetConditions(IEnumerable<(string expression, string name, object? value)> conditions)
         {
-            return isTracking ? dbset.Where(predicate).ToListAsync() : dbset.AsNoTracking().Where(predicate).ToListAsync();
+            conditions = conditions.Select(x =>
+            {
+                if (x.expression.StartsWith("@0"))
+                {
+                    x.value = ChangeType(x.name, x.value);
+                }
+                return x;
+            });
+
+            return QueryableExtensions.ConditionToExpression<T>(conditions.Select(x => (1, x.expression, ChangeType(x.name, x.value)))!);
+        }
+        //处理类型转换
+        protected object? ChangeType(string name, object? value)
+        {
+            var type = entityDictionary.GetType(nameof(T), name);
+            if (type.Equals("int", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return ((List<string>)value!).Select(x => int.Parse(x));
+
+            }
+            else if (type.Equals("long", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return ((List<string>)value!).Select(x => long.Parse(x));
+            }
+            return value;
         }
 
-        public override (List<T>, int) PageList(PageRequest pageRequest, bool isTracking = false)
+
+        #endregion
+
+        public override async Task<(List<T> data, int totalCount)> PageListAsync(PageRequest pageRequest, bool isTracking = false)
         {
-            return (dbset.OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize)
-            .Where(pageRequest.GetSql()).ToList(), Count(QueryableExtensions.StringToExpression<T>(pageRequest.GetExpressions())));
+            if (pageRequest.Conditions.Any())
+            {
+                var conditions = GetConditions(pageRequest.GetExpressions());
+                return (await dbset.Where(conditions).OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize)
+         .ToListAsync(), await CountAsync(conditions));
+            }
+            else
+            {
+
+                return (await dbset.OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize)
+                .ToListAsync(), await CountAsync());
+            }
         }
 
-        public override async Task<(List<T>, int)> PageListAsync(PageRequest pageRequest, bool isTracking = false)
+        public static int GetSikpCount(int pageIndex, int pageSize)
         {
-            return (await dbset.OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize)
-            .Where(pageRequest.GetSql()).ToListAsync(), await CountAsync(QueryableExtensions.StringToExpression<T>(pageRequest.GetExpressions())));
+            return ((pageIndex < 1 ? 1 : pageIndex) - 1) * pageSize;
+        }
+        public async override Task<(List<T> data, int totalCount)> PageListAsync(int pageIndex, int pageSize, string orderField, Expression<Func<T, bool>>? predicate = null)
+        {
+            return (await dbset.WhereIF(predicate is not null, predicate).OrderBy(orderField).PageBy(GetSikpCount(pageIndex, pageSize), pageSize).ToListAsync(), await CountAsync(predicate));
+        }
+        public override (List<T> data, int totalCount) PageList(int pageIndex, int pageSize, string orderField, Expression<Func<T, bool>>? predicate = null)
+        {
+            return (dbset.WhereIF(predicate is not null, predicate).OrderBy(orderField).PageBy(GetSikpCount(pageIndex, pageSize), pageSize).ToList(), Count(predicate));
         }
 
         public override T Single(TPrimaryKey id)
@@ -165,13 +227,13 @@ namespace TakeFramework.EntityFrameworkCore
             return dbset.SingleOrDefaultAsync(x => x.Id!.Equals(id));
         }
 
-        public override Task<int> CountAsync(Expression<Func<T, bool>> predicate)
+        public override Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.CountAsync(predicate);
+            return dbset.WhereIF(predicate is not null, predicate).CountAsync();
         }
-        public override int Count(Expression<Func<T, bool>> predicate)
+        public override int Count(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.Count(predicate);
+            return dbset.WhereIF(predicate is not null, predicate).Count();
         }
         #endregion
         #region delete
@@ -241,18 +303,68 @@ namespace TakeFramework.EntityFrameworkCore
             await dbContext.SaveChangesAsync();
         }
 
-        public override bool Any(Expression<Func<T, bool>> predicate)
+        public override bool Any(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.Any(predicate);
+            return dbset.WhereIF(predicate is not null, predicate).Any();
         }
 
-        public override Task<bool> AnyAsync(Expression<Func<T, bool>> predicate)
+        public override Task<bool> AnyAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.AnyAsync(predicate);
+            return dbset.WhereIF(predicate is not null, predicate).AnyAsync();
+        }
+
+        public override T Single(Expression<Func<T, bool>> predicate)
+        {
+            return dbset.Single(predicate);
+        }
+
+        public override Task<T> SingleAsync(Expression<Func<T, bool>> predicate)
+        {
+            return dbset.SingleAsync(predicate);
+        }
+
+        public override T? SingleOrDefault(Expression<Func<T, bool>> predicate)
+        {
+            return dbset.SingleOrDefault(predicate);
+        }
+
+        public override Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return dbset.SingleOrDefaultAsync(predicate);
         }
 
         #endregion
 
 
+        public Task BeginTransactionAsync()
+        {
+
+            return dbContext.Database.BeginTransactionAsync();
+        }
+        public Task CommitTransactionAsync()
+        {
+
+            return dbContext.Database.CommitTransactionAsync();
+        }
+        public Task RollbackTransactionAsync()
+        {
+            return dbContext.Database.RollbackTransactionAsync();
+        }
+
+        public void BeginTransaction()
+        {
+
+            dbContext.Database.BeginTransaction();
+        }
+        public void CommitTransaction()
+        {
+
+            dbContext.Database.CommitTransaction();
+        }
+        public void RollbackTransaction()
+        {
+            dbContext.Database.RollbackTransaction();
+        }
     }
+
 }

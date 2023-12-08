@@ -49,9 +49,9 @@ namespace TakeFramework.Domain
         {
             return !Conditions.Any() ? null : (string.Join(" and ", Conditions.Select(x => x.Sql)), Conditions.Select(x => x.FieldValue).ToArray());
         }
-        public IEnumerable<(string, object)>? GetExpressions()
+        public IEnumerable<(string, string, object?)>? GetExpressions()
         {
-            return Conditions.Select(x => (x.Expressions, (object)x.FieldValue));
+            return Conditions.Select(x => x.Expressions);
         }
     }
 
@@ -79,24 +79,25 @@ namespace TakeFramework.Domain
         /// 表达式
         /// </summary>
         [JsonIgnore]
-        public string Expressions => this.ConditionalType switch
+        public virtual (string, string, object?) Expressions => this.ConditionalType switch
         {
-            ConditionalType.Equal => $"{this.FieldName}=\"{this.FieldValue}\"",
-            ConditionalType.Like => $"{this.FieldName}.Contains(\"{this.FieldValue}\")",
-            ConditionalType.GreaterThan => $"{this.FieldName}>\"{this.FieldValue}\"",
-            ConditionalType.GreaterThanOrEqual => $"{this.FieldName}>=\"{this.FieldValue}\"",
-            ConditionalType.LessThan => $"{this.FieldName}<\"{this.FieldValue}\"",
-            ConditionalType.LessThanOrEqual => $"{this.FieldName}<=\"{this.FieldValue}\"",
-            ConditionalType.In => $"{this.FieldName}.Contains(\"{this.FieldValue}\")",
-            ConditionalType.NotIn => $"!{this.FieldName}.Contains(\"{this.FieldValue}\")",
-            ConditionalType.LikeLeft => $"{this.FieldName}.StartsWith(\"{this.FieldValue}\")",
-            ConditionalType.LikeRight => $"{this.FieldName}.EndsWith(\"{this.FieldValue}\")",
-            ConditionalType.NoEqual => $"{this.FieldName}!={this.FieldValue}",
-            ConditionalType.IsNullOrEmpty => $"{this.FieldName}.IsNullOrEmpty(\"{this.FieldValue}\")",
-            ConditionalType.IsNot => $"{this.FieldName} is not null",
-            ConditionalType.NoLike => $"!{this.FieldName}.Contains(\"{this.FieldValue}\")",
-
-            _ => string.Empty
+            ConditionalType.Equal => ($"{this.FieldName}=@0", this.FieldName, this.FieldValue),
+            ConditionalType.Like => ($"{this.FieldName}.Contains(@0)", this.FieldName, this.FieldValue),
+            ConditionalType.GreaterThan => ($"{this.FieldName}>@0", this.FieldName, this.FieldValue),
+            ConditionalType.GreaterThanOrEqual => ($"{this.FieldName}>=@0", this.FieldName, this.FieldValue),
+            ConditionalType.LessThan => ($"{this.FieldName}<@0", this.FieldName, this.FieldValue),
+            ConditionalType.LessThanOrEqual => ($"{this.FieldName}<=@0", this.FieldName, this.FieldValue),
+            ConditionalType.In => ($"@0.Contains(\"{this.FieldName}\")", this.FieldName, this.FieldValue.Split(",")),
+            ConditionalType.NotIn => ($"!@0.Contains(\"{this.FieldName}\")", this.FieldName, this.FieldValue.Split(",")),
+            ConditionalType.LikeLeft => ($"{this.FieldName}.StartsWith(@0)", this.FieldName, this.FieldValue),
+            ConditionalType.LikeRight => ($"{this.FieldName}.EndsWith(@0)", this.FieldName, this.FieldValue),
+            ConditionalType.NoEqual => ($"{this.FieldName}!={this.FieldValue}", this.FieldName, this.FieldValue),
+            ConditionalType.IsNullOrEmpty => ($"{this.FieldName}.IsNullOrEmpty(@0)", this.FieldName, this.FieldValue),
+            ConditionalType.IsNot => ($"{this.FieldName} is not null", this.FieldName, this.FieldValue),
+            ConditionalType.NoLike => ($"!{this.FieldName}.Contains(@0)", this.FieldName, this.FieldValue),
+            ConditionalType.EqualNull => throw new NotImplementedException(),
+            ConditionalType.InLike => throw new NotImplementedException(),
+            _ => (string.Empty, string.Empty, null)
         };
 
         /// <summary>

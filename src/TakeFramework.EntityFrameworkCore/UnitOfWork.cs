@@ -3,16 +3,10 @@ using TakeFramework.Domain.Uow;
 
 namespace TakeFramework.EntityFrameworkCore
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork(IEnumerable<IDbContextProvider> dbContextProviders) : IUnitOfWork
     {
-        private readonly Dictionary<string, DbContext> dbContextProviders;
+        private readonly Dictionary<string, DbContext> dbContextProviders = dbContextProviders.ToDictionary(x => x.Name, v => (DbContext)v);
         private bool disposedValue;
-
-        public UnitOfWork(IEnumerable<IDbContextProvider> dbContextProviders)
-        {
-            //如何避免额外开启当前不相关数据库的事务启动
-            this.dbContextProviders = dbContextProviders.ToDictionary(x => x.Name, v => (DbContext)v);
-        }
 
         public bool HasActiveTransaction { get; set; }
 

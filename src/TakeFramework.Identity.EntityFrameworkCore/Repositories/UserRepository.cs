@@ -4,11 +4,9 @@ using TakeFramework.Identity.PO;
 
 namespace TakeFramework.Identity.Repositories
 {
-    public class UserRepository : EFCoreRepository<User, long>, IUserRepository<User,long>
+    public class UserRepository(IEnumerable<IDbContextProvider> dbContextProviders, IOptions<IdentitySettings> identitySettings, EntityDictionary entityDictionary) 
+    : EFCoreRepository<User, long>(dbContextProviders, identitySettings, entityDictionary), IUserRepository<User, long>
     {
-        public UserRepository(IEnumerable<IDbContextProvider> dbContextProviders, IOptions<IdentitySettings> identitySettings) : base(dbContextProviders, identitySettings)
-        {
-        }
     }
 }
 

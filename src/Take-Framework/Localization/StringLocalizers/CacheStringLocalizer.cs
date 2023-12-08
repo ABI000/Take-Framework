@@ -4,14 +4,9 @@ using TakeFramework.Cache;
 
 namespace TakeFramework.Localization.StringLocalizers
 {
-    public class CacheStringLocalizer : ITakeFrameworkStringLocalizer
+    public class CacheStringLocalizer(ICacheProvider cacheProvider) : ITakeFrameworkStringLocalizer
     {
-        private readonly ICacheProvider cacheProvider;
-
-        public CacheStringLocalizer(ICacheProvider cacheProvider)
-        {
-            this.cacheProvider = cacheProvider;
-        }
+        private readonly ICacheProvider cacheProvider = cacheProvider;
 
         public LocalizedString this[string name]
         {

@@ -7,15 +7,10 @@ using System.Threading.Tasks;
 
 namespace TakeFramework.Cache
 {
-    public class CacheProvider : ICacheProvider
+    public class CacheProvider(IMemoryCache memoryCache) : ICacheProvider
     {
         public string Tag => "Cache";
-        private readonly IMemoryCache memoryCache;
-
-        public CacheProvider(IMemoryCache memoryCache)
-        {
-            this.memoryCache = memoryCache;
-        }
+        private readonly IMemoryCache memoryCache = memoryCache;
 
         #region add
 

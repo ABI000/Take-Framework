@@ -16,16 +16,11 @@ namespace TakeFramework.Web.Authentication
     /// <summary>
     /// 验证用户身份是否符合当前SchemeName的认证逻辑
     /// </summary>
-    public class TFAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
+    public class TFAuthenticationHandler(IJwt jwt,
+        IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder, clock)
     {
-        private readonly IJwt jwt;
+        private readonly IJwt jwt = jwt;
         public const string SchemeName = "TF";
-
-        public TFAuthenticationHandler(IJwt jwt,
-            IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : base(options, logger, encoder, clock)
-        {
-            this.jwt = jwt;
-        }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
