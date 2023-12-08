@@ -4,16 +4,12 @@
     /// 响应实体
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ApiResponse<T> : ApiResponse
+    public class ApiResponse<T>(T? data) : ApiResponse
     {
-        public ApiResponse(T? data)
-        {
-            this.Data = data;
-        }
         /// <summary>
         /// 数据主体
         /// </summary>
-        public T? Data { get; set; }
+        public T? Data { get; set; } = data;
     }
     public class ApiResponse
     {

@@ -8,14 +8,10 @@ using System.Text;
 namespace TakeFramework.JWT
 {
 
-    public class JwtHelper : IJwt
+    public class JwtHelper(IOptions<JwtConfiguration> configuration) : IJwt
     {
-        private readonly JwtConfiguration configuration;
+        private readonly JwtConfiguration configuration = configuration.Value;
 
-        public JwtHelper(IOptions<JwtConfiguration> configuration)
-        {
-            this.configuration = configuration.Value;
-        }
         public string GenerateToken(params Claim[] claims)
         {
             var jwtSecurityToken = new JwtSecurityToken(

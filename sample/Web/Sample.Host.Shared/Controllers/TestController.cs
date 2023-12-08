@@ -13,35 +13,15 @@ namespace Sample.Host.Shared.Controllers
     public class TestController : ControllerBase
     {
         private readonly ICacheProvider cacheProvider;
-        private readonly TestService testService;
-        public TestController(TestService testService, CacheProviderFactory cacheProviderFactory)
+        public TestController(CacheProviderFactory cacheProviderFactory)
         {
-            this.testService = testService;
             cacheProvider = cacheProviderFactory.GetCacheProvider();
-            //³õÊ¼»¯·­Òë
+            //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
             cacheProvider.Add("LocalizationResource_zh-CN", new List<KeyValuePair<string, string>> {
-                new KeyValuePair<string, string>("ServerError", "·þÎñ´íÎó")
+                new KeyValuePair<string, string>("ServerError", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")
             });
         }
-        [HttpPost("CreateUser")]
-        public async Task<ApiResponse> CreateAsync(UserDto userDto)
-        {
-            await testService.CreateAsync(userDto);
-            return new ApiResponse<string>("ok");
-        }
-
-        [HttpGet("userList")]
-        public IEnumerable<UserDto> userList()
-        {
-            return testService.List();
-        }
-        [HttpGet("GetException")]
-        public void GetException()
-        {
-            testService.GetException();
-        }
-
         [HttpGet("GetCache")]
         public ApiResponse GetCache(string key, string value)
         {
@@ -64,12 +44,7 @@ namespace Sample.Host.Shared.Controllers
         {
             return new ApiResponse<TestApiResponse>(intput);
         }
-        [AllowAnonymous]
-        [HttpGet("GetJWTToken")]
-        public async Task<ApiResponse> GetJWTToken()
-        {
-            return new ApiResponse<string>(await testService.GenerateTokenAsync());
-        }
+
         [Authorize]
         [HttpGet("GetAuthorization")]
         public ApiResponse GetAuthorization()

@@ -5,13 +5,9 @@ using TakeFramework.Exceptions;
 
 namespace TakeFramework.Web.Middleware
 {
-    public class ErorrMiddleware : IMiddleware
+    public class ErorrMiddleware(ILogger<ErorrMiddleware> logger) : IMiddleware
     {
-        private readonly ILogger logger;
-        public ErorrMiddleware(ILogger<ErorrMiddleware> logger)
-        {
-            this.logger = logger;
-        }
+        private readonly ILogger logger = logger;
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {

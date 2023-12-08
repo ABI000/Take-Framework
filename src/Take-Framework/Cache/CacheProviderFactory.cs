@@ -2,14 +2,9 @@
 
 namespace TakeFramework.Cache
 {
-    public class CacheProviderFactory
+    public class CacheProviderFactory(IEnumerable<ICacheProvider> cacheProviders)
     {
-        protected readonly Dictionary<string, ICacheProvider> keyValuePairs;
-
-        public CacheProviderFactory(IEnumerable<ICacheProvider> cacheProviders)
-        {
-            keyValuePairs = cacheProviders.ToDictionary(x => x.Tag);         
-        }
+        protected readonly Dictionary<string, ICacheProvider> keyValuePairs = cacheProviders.ToDictionary(x => x.Tag);
 
         public ICacheProvider GetCacheProviderByKey(string key)
         {

@@ -6,6 +6,7 @@ namespace TakeFramework.Domain.Repositories
     public interface IBaseRepository<T, TPrimaryKey> : IBaseRepository
         where T : class, IEntity<TPrimaryKey>
     {
+
         #region Task/async
 
         #region Create
@@ -88,10 +89,18 @@ namespace TakeFramework.Domain.Repositories
         /// <param name="predicate"></param>
         /// <returns></returns>
         public Task DeleteAsync(Expression<Func<T, bool>> predicate);
+
+
         #endregion
 
         #region Select
 
+        /// <summary>
+        /// 根据表达式获取第一条数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// 获取条数据
@@ -105,7 +114,9 @@ namespace TakeFramework.Domain.Repositories
         /// </summary>
         /// <param name="pageRequest"></param>
         /// <returns></returns>
-        public Task<(List<T>, int)> PageListAsync(PageRequest pageRequest, bool isTracking = false);
+        public Task<(List<T> data, int totalCount)> PageListAsync(PageRequest pageRequest, bool isTracking = false);
+
+        public Task<(List<T> data, int totalCount)> PageListAsync(int sikpCount, int pageSize, string orderField, Expression<Func<T, bool>>? predicate = null);
 
         /// <summary>
         /// 根据表达式获取第一条数据
@@ -113,19 +124,15 @@ namespace TakeFramework.Domain.Repositories
         /// <param name="predicate"></param>
         /// <returns></returns>
         public Task<T?> FistOrDefaultAsync(Expression<Func<T, bool>> predicate);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<List<T>> ListAsync(bool isTracking = false);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public Task<List<T>> ListAsync(Expression<Func<T, bool>> predicate, bool isTracking = false);
 
-        public Task<int> CountAsync(Expression<Func<T, bool>> predicate);
-        public Task<bool> AnyAsync(Expression<Func<T, bool>> predicate);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<T>> ListAsync(Expression<Func<T, bool>>? predicate = null, bool isTracking = false);
+
+        public Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null);
+        public Task<bool> AnyAsync(Expression<Func<T, bool>>? predicate = null);
         #endregion
 
         #endregion
@@ -215,7 +222,7 @@ namespace TakeFramework.Domain.Repositories
         #endregion
 
         #region Select
-
+        public T Single(Expression<Func<T, bool>> predicate);
 
         /// <summary>
         /// 获取条数据
@@ -225,11 +232,18 @@ namespace TakeFramework.Domain.Repositories
         /// <exception cref="Exception"></exception>
         public T Single(TPrimaryKey id);
         /// <summary>
+        /// 根据表达式获取第一条数据
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public T? SingleOrDefault(Expression<Func<T, bool>> predicate);
+        /// <summary>
         /// 分页查询
         /// </summary>
         /// <param name="pageRequest"></param>
         /// <returns></returns>
-        public (List<T>, int) PageList(PageRequest pageRequest, bool isTracking = false);
+        public (List<T> data, int totalCount) PageList(PageRequest pageRequest, bool isTracking = false);
+        public (List<T> data, int totalCount) PageList(int sikpCount, int pageSize, string orderField, Expression<Func<T, bool>>? predicate = null);
 
         /// <summary>
         /// 根据表达式获取第一条数据
@@ -241,22 +255,16 @@ namespace TakeFramework.Domain.Repositories
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<T> List(bool isTracking = false);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public List<T> List(Expression<Func<T, bool>> predicate, bool isTracking = false);
+        public List<T> List(Expression<Func<T, bool>>? predicate = null, bool isTracking = false);
 
-        public int Count(Expression<Func<T, bool>> predicate);
-        public bool Any(Expression<Func<T, bool>> predicate);
-        #endregion
+        public int Count(Expression<Func<T, bool>>? predicate = null);
+        public bool Any(Expression<Func<T, bool>>? predicate = null);
 
         #endregion
 
+        #endregion
 
 
     }
-
     public interface IBaseRepository { }
 }
