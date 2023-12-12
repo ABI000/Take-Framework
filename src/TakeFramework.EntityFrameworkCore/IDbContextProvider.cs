@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace TakeFramework.EntityFrameworkCore
+﻿namespace TakeFramework.EntityFrameworkCore
 {
     public interface IDbContextProvider
     {

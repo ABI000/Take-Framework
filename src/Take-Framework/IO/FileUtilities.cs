@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TakeFramework.IO
+﻿namespace TakeFramework.IO
 {
     public class FileUtilities
     {

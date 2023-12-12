@@ -11,6 +11,7 @@ namespace TakeFramework.Domain.Repositories
             {
                 services.AddScoped(type);
             }
+            
             return services;
         }
     }

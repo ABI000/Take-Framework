@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace TakeFramework.Trees
+﻿namespace TakeFramework.Trees
 {
     /*
      * NodeId不为空，但是ParentId可为空

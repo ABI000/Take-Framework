@@ -12,17 +12,7 @@ namespace TakeFramework.EntityFrameworkCore
 
         public void BeginTransaction(string? name = null)
         {
-            if (name is not null)
-            {
-                GetContext(name).Database.BeginTransaction();
-            }
-            else
-            {
-                foreach (var context in dbContextProviders)
-                {
-                    context.Value.Database.BeginTransaction();
-                }
-            }
+            GetContext(name).Database.BeginTransaction();
         }
 
         private DbContext GetContext(string? name)
@@ -37,44 +27,15 @@ namespace TakeFramework.EntityFrameworkCore
             }
         }
 
-        public void Commit(string? name = null)
+        public void CommitTransaction(string? name = null)
         {
-            try
-            {
-                if (name is not null)
-                {
-                    GetContext(name).Database.BeginTransaction();
-                }
-                else
-                {
-                    foreach (var context in dbContextProviders)
-                    {
-                        context.Value.Database.CommitTransaction();
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                Rollback(name);
-                throw;
-            }
+            GetContext(name).Database.CommitTransaction();
         }
 
-        public void Rollback(string? name = null)
+        public void RollbackTransaction(string? name = null)
         {
-            if (name is not null)
-            {
-                GetContext(name).Database.BeginTransaction();
-            }
-            else
-            {
-                foreach (var context in dbContextProviders)
-                {
-                    context.Value.Database.RollbackTransaction();
-                }
-            }
+            GetContext(name).Database.RollbackTransaction();
         }
-
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -89,14 +50,6 @@ namespace TakeFramework.EntityFrameworkCore
                 disposedValue = true;
             }
         }
-
-        // // TODO: 仅当“Dispose(bool disposing)”拥有用于释放未托管资源的代码时才替代终结器
-        // ~UnitOfWork()
-        // {
-        //     // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中
-        //     Dispose(disposing: false);
-        // }
-
         public void Dispose()
         {
             // 不要更改此代码。请将清理代码放入“Dispose(bool disposing)”方法中

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TakeFramework.Domain.Entities;
+﻿using TakeFramework.Domain.Entities;
 
 namespace TakeFramework.Identity.PO.Extension
 {

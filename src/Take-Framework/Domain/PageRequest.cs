@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace TakeFramework.Domain
 {
@@ -47,7 +42,7 @@ namespace TakeFramework.Domain
 
         public (string, object[] args)? GetSql()
         {
-            return !Conditions.Any() ? null : (string.Join(" and ", Conditions.Select(x => x.Sql)), Conditions.Select(x => x.FieldValue).ToArray());
+            return Conditions.Count == 0 ? null : (string.Join(" and ", Conditions.Select(x => x.Sql)), Conditions.Select(x => x.FieldValue).ToArray());
         }
         public IEnumerable<(string, string, object?)>? GetExpressions()
         {

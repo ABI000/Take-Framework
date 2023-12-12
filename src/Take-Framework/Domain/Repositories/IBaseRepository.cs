@@ -264,7 +264,6 @@ namespace TakeFramework.Domain.Repositories
 
         #endregion
 
-
     }
     public interface IBaseRepository { }
 }
