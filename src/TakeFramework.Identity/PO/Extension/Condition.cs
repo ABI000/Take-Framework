@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using TakeFramework.Domain.Entities;
+﻿using TakeFramework.Domain.Entities;
 
 namespace TakeFramework.Identity.PO.extension
 {

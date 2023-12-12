@@ -16,8 +16,6 @@ namespace TakeFramework.EntityFrameworkCore
 
         protected readonly IQueryable<T> Queryable;
         protected readonly EntityDictionary entityDictionary;
-        private readonly IEnumerable<IDbContextProvider> dbContextProviders;
-
         public EFCoreRepository(IEnumerable<IDbContextProvider> dbContextProviders, EntityDictionary entityDictionary)
         {
             this.entityDictionary = entityDictionary;
@@ -30,27 +28,24 @@ namespace TakeFramework.EntityFrameworkCore
         public override T Create(T intput)
         {
             dbset.Add(intput);
-            dbContext.SaveChanges();
             return intput;
         }
 
         public override void Create(List<T> intput)
         {
             dbset.AddRange(intput);
-            dbContext.SaveChanges();
         }
 
-        public override async Task<T> CreateAsync(T intput)
+        public override Task<T> CreateAsync(T intput)
         {
             dbset.Add(intput);
-            await dbContext.SaveChangesAsync();
-            return intput;
+            return Task.FromResult(intput);
         }
 
         public override Task CreateAsync(List<T> intput)
         {
             dbset.AddRange(intput);
-            return dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         #endregion
@@ -61,14 +56,12 @@ namespace TakeFramework.EntityFrameworkCore
         public override T Update(T intput)
         {
             dbset.Update(intput);
-            dbContext.SaveChanges();
             return intput;
         }
 
         public override void Update(List<T> intput)
         {
             dbset.UpdateRange(intput);
-            dbContext.SaveChanges();
         }
         /// <summary>
         /// 未实现
@@ -89,14 +82,13 @@ namespace TakeFramework.EntityFrameworkCore
         public override Task<T> UpdateAsync(T intput)
         {
             dbset.UpdateRange(intput);
-            dbContext.SaveChangesAsync();
             return Task.FromResult(intput);
         }
 
         public override Task UpdateAsync(List<T> intput)
         {
             dbset.UpdateRange(intput);
-            return dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
         /// <summary>
         /// 未实现
@@ -125,17 +117,17 @@ namespace TakeFramework.EntityFrameworkCore
 
         public override List<T> List(Expression<Func<T, bool>>? predicate = null, bool isTracking = false)
         {
-            return isTracking ? dbset.WhereIF(predicate is not null, predicate).ToList() : dbset.AsNoTracking().WhereIF(predicate is not null, predicate).ToList();
+            return isTracking ? dbset.WhereIF(predicate).ToList() : dbset.AsNoTracking().WhereIF(predicate).ToList();
         }
 
         public override Task<List<T>> ListAsync(Expression<Func<T, bool>>? predicate = null, bool isTracking = false)
         {
-            return isTracking ? dbset.WhereIF(predicate is not null, predicate).ToListAsync() : dbset.AsNoTracking().WhereIF(predicate is not null, predicate).ToListAsync();
+            return isTracking ? dbset.WhereIF(predicate).ToListAsync() : dbset.AsNoTracking().WhereIF(predicate).ToListAsync();
         }
 
         public override (List<T> data, int totalCount) PageList(PageRequest pageRequest, bool isTracking = false)
         {
-            if (pageRequest.Conditions.Any())
+            if (pageRequest.Conditions.Count != 0)
             {
                 var conditions = GetConditions(pageRequest.GetExpressions());
                 return (dbset.Where(conditions).OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize).ToList(), Count(conditions));
@@ -151,31 +143,17 @@ namespace TakeFramework.EntityFrameworkCore
 
         private Expression<Func<T, bool>> GetConditions(IEnumerable<(string expression, string name, object? value)> conditions)
         {
+            var typeName = nameof(T);
             conditions = conditions.Select(x =>
             {
                 if (x.expression.StartsWith("@0"))
                 {
-                    x.value = ChangeType(x.name, x.value);
+                    x.value = entityDictionary.ChangeType(typeName, x.name, x.value);
                 }
                 return x;
             });
 
-            return QueryableExtensions.ConditionToExpression<T>(conditions.Select(x => (1, x.expression, ChangeType(x.name, x.value)))!);
-        }
-        //处理类型转换
-        protected object? ChangeType(string name, object? value)
-        {
-            var type = entityDictionary.GetType(nameof(T), name);
-            if (type.Equals("int", StringComparison.CurrentCultureIgnoreCase))
-            {
-                return ((List<string>)value!).Select(x => int.Parse(x));
-
-            }
-            else if (type.Equals("long", StringComparison.CurrentCultureIgnoreCase))
-            {
-                return ((List<string>)value!).Select(x => long.Parse(x));
-            }
-            return value;
+            return QueryableExtensions.ConditionToExpression<T>(conditions.Select(x => (1, x.expression, entityDictionary.ChangeType(typeName, x.name, x.value)))!);
         }
 
 
@@ -183,7 +161,7 @@ namespace TakeFramework.EntityFrameworkCore
 
         public override async Task<(List<T> data, int totalCount)> PageListAsync(PageRequest pageRequest, bool isTracking = false)
         {
-            if (pageRequest.Conditions.Any())
+            if (pageRequest.Conditions.Count != 0)
             {
                 var conditions = GetConditions(pageRequest.GetExpressions());
                 return (await dbset.Where(conditions).OrderBy(pageRequest.OrderField).PageBy(pageRequest.SikpCount, pageRequest.PageSize)
@@ -203,11 +181,11 @@ namespace TakeFramework.EntityFrameworkCore
         }
         public async override Task<(List<T> data, int totalCount)> PageListAsync(int pageIndex, int pageSize, string orderField, Expression<Func<T, bool>>? predicate = null)
         {
-            return (await dbset.WhereIF(predicate is not null, predicate).OrderBy(orderField).PageBy(GetSikpCount(pageIndex, pageSize), pageSize).ToListAsync(), await CountAsync(predicate));
+            return (await dbset.WhereIF(predicate).OrderBy(orderField).PageBy(GetSikpCount(pageIndex, pageSize), pageSize).ToListAsync(), await CountAsync(predicate));
         }
         public override (List<T> data, int totalCount) PageList(int pageIndex, int pageSize, string orderField, Expression<Func<T, bool>>? predicate = null)
         {
-            return (dbset.WhereIF(predicate is not null, predicate).OrderBy(orderField).PageBy(GetSikpCount(pageIndex, pageSize), pageSize).ToList(), Count(predicate));
+            return (dbset.WhereIF(predicate).OrderBy(orderField).PageBy(GetSikpCount(pageIndex, pageSize), pageSize).ToList(), Count(predicate));
         }
 
         public override T Single(TPrimaryKey id)
@@ -229,24 +207,22 @@ namespace TakeFramework.EntityFrameworkCore
 
         public override Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.WhereIF(predicate is not null, predicate).CountAsync();
+            return dbset.WhereIF(predicate).CountAsync();
         }
         public override int Count(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.WhereIF(predicate is not null, predicate).Count();
+            return dbset.WhereIF(predicate).Count();
         }
         #endregion
         #region delete
         public override void Delete(T intput)
         {
             dbset.Remove(intput);
-            dbContext.SaveChanges();
         }
 
         public override void Delete(List<T> intput)
         {
             dbset.RemoveRange(intput);
-            dbContext.SaveChanges();
         }
 
         public override void Delete(TPrimaryKey intput)
@@ -254,7 +230,6 @@ namespace TakeFramework.EntityFrameworkCore
             var data = SingleOrDefault(intput);
             if (data is null) return;
             dbset.Remove(data);
-            dbContext.SaveChanges();
         }
 
         public override void Delete(List<TPrimaryKey> intput)
@@ -265,21 +240,20 @@ namespace TakeFramework.EntityFrameworkCore
         public override void Delete(Expression<Func<T, bool>> predicate)
         {
             var data = List(predicate, true);
-            if (data is null || !data.Any()) return;
+            if (data is null || data.Count == 0) return;
             dbset.RemoveRange(data);
-            dbContext.SaveChanges();
         }
 
         public override Task DeleteAsync(T intput)
         {
             dbset.Remove(intput);
-            return dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
-        public override async Task DeleteAsync(List<T> intput)
+        public override Task DeleteAsync(List<T> intput)
         {
             dbset.RemoveRange(intput);
-            await dbContext.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         public override async Task DeleteAsync(TPrimaryKey intput)
@@ -287,7 +261,6 @@ namespace TakeFramework.EntityFrameworkCore
             var data = await SingleOrDefaultAsync(intput);
             if (data is null) return;
             dbset.Remove(data);
-            dbContext.SaveChanges();
         }
 
         public override Task DeleteAsync(List<TPrimaryKey> intput)
@@ -298,73 +271,44 @@ namespace TakeFramework.EntityFrameworkCore
         public override async Task DeleteAsync(Expression<Func<T, bool>> predicate)
         {
             var data = await ListAsync(predicate, true);
-            if (data is null || !data.Any()) return;
+            if (data is null || data.Count == 0) return;
             dbset.RemoveRange(data);
-            await dbContext.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
         public override bool Any(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.WhereIF(predicate is not null, predicate).Any();
+            return dbset.WhereIF(predicate).Any();
         }
 
         public override Task<bool> AnyAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.WhereIF(predicate is not null, predicate).AnyAsync();
+            return dbset.WhereIF(predicate).AnyAsync();
         }
 
-        public override T Single(Expression<Func<T, bool>> predicate)
+        public override T Single(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.Single(predicate);
+            return dbset.WhereIF(predicate).Single();
         }
 
-        public override Task<T> SingleAsync(Expression<Func<T, bool>> predicate)
+        public override Task<T> SingleAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.SingleAsync(predicate);
+            return dbset.WhereIF(predicate).SingleAsync();
         }
 
-        public override T? SingleOrDefault(Expression<Func<T, bool>> predicate)
+        public override T? SingleOrDefault(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.SingleOrDefault(predicate);
+            return dbset.WhereIF(predicate).SingleOrDefault();
         }
 
-        public override Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        public override Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>>? predicate = null)
         {
-            return dbset.SingleOrDefaultAsync(predicate);
+            return dbset.WhereIF(predicate).SingleOrDefaultAsync();
         }
 
         #endregion
 
 
-        public Task BeginTransactionAsync()
-        {
-
-            return dbContext.Database.BeginTransactionAsync();
-        }
-        public Task CommitTransactionAsync()
-        {
-
-            return dbContext.Database.CommitTransactionAsync();
-        }
-        public Task RollbackTransactionAsync()
-        {
-            return dbContext.Database.RollbackTransactionAsync();
-        }
-
-        public void BeginTransaction()
-        {
-
-            dbContext.Database.BeginTransaction();
-        }
-        public void CommitTransaction()
-        {
-
-            dbContext.Database.CommitTransaction();
-        }
-        public void RollbackTransaction()
-        {
-            dbContext.Database.RollbackTransaction();
-        }
     }
 
 }

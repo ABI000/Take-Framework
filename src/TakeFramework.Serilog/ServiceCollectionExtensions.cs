@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace TakeFramework.Serilog
+﻿namespace TakeFramework.Serilog
 {
     public static class ServiceCollectionExtensions
     {

@@ -16,6 +16,11 @@ public static class QueryableExtensions
     {
         return isuse ? query.Where(expression) : query;
     }
+
+    public static IQueryable<T> WhereIF<T>(this IQueryable<T> query, Expression<Func<T, bool>>? expression)
+    {
+        return expression is not null ? query.Where(expression) : query;
+    }
     public static Expression<Func<T, bool>> ConditionToExpression<T>(IEnumerable<(int logicalConnective, string expression, object? value)> conditions)
     {
         Expression<Func<T, bool>> expression = DynamicExpressionParser.ParseLambda<T, bool>(new ParsingConfig(), true, conditions.First().expression, conditions.First().value);

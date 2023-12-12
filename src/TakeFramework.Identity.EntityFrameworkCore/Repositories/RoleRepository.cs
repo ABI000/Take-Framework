@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using TakeFramework.Domain.Repositories;
+﻿using Microsoft.Extensions.Options;
 using TakeFramework.EntityFrameworkCore;
 using TakeFramework.Identity.PO;
 

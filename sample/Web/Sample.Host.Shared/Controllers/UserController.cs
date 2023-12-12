@@ -1,10 +1,5 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Sample.Core;
-using Sample.Server;
-using Sample.Server.Contracts;
-using TakeFramework.Exceptions;
 
 namespace Sample.Host.Shared.Controllers
 {

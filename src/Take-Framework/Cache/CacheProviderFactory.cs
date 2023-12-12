@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace TakeFramework.Cache
+﻿namespace TakeFramework.Cache
 {
     public class CacheProviderFactory(IEnumerable<ICacheProvider> cacheProviders)
     {

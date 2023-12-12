@@ -4,7 +4,7 @@
     {
         bool HasActiveTransaction { get; set; }
         void BeginTransaction(string? name = null);
-        void Commit(string? name = null);
-        void Rollback(string? name = null);
+        void CommitTransaction(string? name = null);
+        void RollbackTransaction(string? name = null);
     }
 }

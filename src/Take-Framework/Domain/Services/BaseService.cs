@@ -1,4 +1,6 @@
-﻿namespace TakeFramework.Domain.Services
+﻿using TakeFramework.Domain.Uow;
+
+namespace TakeFramework.Domain.Services
 {
     /// <summary>
     /// 基础业务服务类
@@ -6,8 +8,7 @@
     /// <typeparam name="T"></typeparam>
     public class BaseService : IBaseService
     {
-        //protected readonly IHttpContextAccessor httpContent;
-        //protected readonly BasePayLoad Payload;
+        protected readonly IUnitOfWork _unitOfWork;
 
         /// <summary>
         /// 构造函数
@@ -15,13 +16,9 @@
         /// <param name="mapper"></param>
         /// <param name="rpository"></param>
         /// <param name="httpContent"></param>
-        public BaseService()
+        public BaseService(IUnitOfWork unitOfWork)
         {
-            //if (httpContent != null)
-            //{
-            //    Payload = new BasePayLoad(httpContent.HttpContext);
-            //}
-            //this.httpContent = httpContent;
+            _unitOfWork = unitOfWork;
         }
 
 
