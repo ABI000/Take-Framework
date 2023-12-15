@@ -48,7 +48,13 @@ namespace Sample.Host.Shared.Controllers
         {
             return new ApiResponse<string>("ok");
         }
-
+        [Authorize]
+        [AllowAnonymous()]
+        [HttpGet("GetAllowAnonymous")]
+        public ApiResponse GetAllowAnonymous()
+        {
+            return new ApiResponse<string>("ok");
+        }
     }
     public class TestApiResponse
     {

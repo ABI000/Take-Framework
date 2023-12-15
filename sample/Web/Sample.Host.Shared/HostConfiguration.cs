@@ -48,8 +48,8 @@ namespace Sample.Host.Shared
             services.AddUnitOfWork();
             services.AddDynamicProxys();
             services.AddJwt(configuration);
-            // services.AddTFAuthentication();
-            // services.AddTFAuthorization();
+            services.AddTFAuthentication();
+            services.AddTFAuthorization();
             return services;
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)
