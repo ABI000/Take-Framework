@@ -12,7 +12,7 @@ namespace TakeFramework.Web.Authentication
     /// 验证用户身份是否符合当前SchemeName的认证逻辑
     /// </summary>
     public class TFAuthenticationHandler(IJwt jwt,
-        IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ISystemClock clock) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder, clock)
+        IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder) : AuthenticationHandler<AuthenticationSchemeOptions>(options, logger, encoder)
     {
         private readonly IJwt jwt = jwt;
         public const string SchemeName = "TF";
@@ -20,18 +20,24 @@ namespace TakeFramework.Web.Authentication
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
             Request.Headers.TryGetValue("Authorization", out StringValues values);
-            string valStr = values.ToString();
-            if (!string.IsNullOrWhiteSpace(valStr))
+            string? valStr = values.FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(valStr))
             {
-                (bool check, ClaimsPrincipal claimsPrincipal) = await jwt.ValidateTokenAsync(valStr);
-                if (!check)
-                    return AuthenticateResult.Fail("未登陆");
-                else
-                {
-                    return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, SchemeName));
-                }
+                return AuthenticateResult.Fail("Unauthorised");
             }
-            return AuthenticateResult.Fail("未登陆");
+            (bool check, ClaimsPrincipal claimsPrincipal) = await jwt.ValidateTokenAsync(valStr);
+            if (!check)
+            {
+                return AuthenticateResult.Fail("Unauthorised");
+            }
+            else
+            {
+                return AuthenticateResult.Success(new AuthenticationTicket(claimsPrincipal, SchemeName));
+            }
+        }
+        protected override Task HandleForbiddenAsync(AuthenticationProperties properties)
+        {
+            return base.HandleForbiddenAsync(properties);
         }
     }
 }

@@ -57,8 +57,8 @@ namespace Sample.Web
             {
                 app.UseSwagger(builder.Configuration);
             }
-            // app.UseAuthentication();
-            // app.UseAuthorization();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllers();
             app.Run();
 
