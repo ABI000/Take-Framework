@@ -2,9 +2,10 @@
 
 namespace TakeFramework.Domain.Uow
 {
-    public class UnitOfWorkAttribute
+    [AttributeUsage(AttributeTargets.Method)]
+    public class UnitOfWorkAttribute : Attribute
     {
-        public string DBName { get; set; }
+        public string? DBName { get; set; }
 
     }
 }

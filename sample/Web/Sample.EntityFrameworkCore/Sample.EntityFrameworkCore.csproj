@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\TakeFramework.EntityFrameworkCore.SqlServer\TakeFramework.EntityFrameworkCore.SqlServer.csproj" />
-    <ProjectReference Include="..\Sample.Core\Sample.Core.csproj" />
+    <ProjectReference Include="..\Sample.Domain\Sample.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

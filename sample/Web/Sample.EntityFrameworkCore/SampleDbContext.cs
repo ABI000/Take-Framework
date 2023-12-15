@@ -1,34 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Sample.Core;
 using TakeFramework.EntityFrameworkCore;
+using Sample.Domain;
+
 
 namespace Sample.EntityFrameworkCore
 {
-    public class SampleDbContext : BaseDbContext<SampleDbContext>, IDbContextProvider
+    public class SampleDbContext(IOptions<DBSettings> dBSettings) : BaseDbContext<SampleDbContext>(dBSettings), IDbContextProvider
     {
-        private readonly DBSetting _dBSettings;
-        public SampleDbContext(IOptions<DBSettings> dBSettings)
-        {
-            _dBSettings = dBSettings?.Value?.DBSettingList?.FirstOrDefault(x => x.Name == Name);
-            if (_dBSettings is null)
-            {
-                throw new AggregateException();
-            }
-        }
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_dBSettings.ConnectionString);
+            optionsBuilder.UseSqlServer(_dBSetting.ConnectionString);
         }
 
         public override SampleDbContext GetDbContext()
         {
             return this;
         }
-
-        public DbSet<User> User { get; set; }
-
         public override string Name => "Sample";
+        public DbSet<Blog> Blog { get; set; }
     }
 }

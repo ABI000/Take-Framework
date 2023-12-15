@@ -16,7 +16,7 @@ namespace Sample.Host.Shared.Controllers
             //��ʼ������
 
             cacheProvider.Add("LocalizationResource_zh-CN", new List<KeyValuePair<string, string>> {
-                new KeyValuePair<string, string>("ServerError", "�������")
+                new("ServerError", "�������")
             });
         }
         [HttpGet("GetCache")]

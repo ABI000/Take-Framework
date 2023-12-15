@@ -32,10 +32,10 @@ else
 }
 
 @code {
-    private UserDto[]? userList;
+    private BlogDto[]? userList;
     protected override async Task OnInitializedAsync()
     {
-        userList = await Http.GetFromJsonAsync<UserDto[]>("User/userlist");
+        userList = await Http.GetFromJsonAsync<BlogDto[]>("User/userlist");
     }
 
 }

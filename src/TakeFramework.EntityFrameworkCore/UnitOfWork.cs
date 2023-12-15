@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using TakeFramework.Domain.Uow;
 
 namespace TakeFramework.EntityFrameworkCore
 {
-    public class UnitOfWork(IEnumerable<IDbContextProvider> dbContextProviders) : IUnitOfWork
+    public class UnitOfWork(IEnumerable<IDbContextProvider> dbContextProviders, IOptions<DBSettings> dBSettings) : IUnitOfWork
     {
         private readonly Dictionary<string, DbContext> dbContextProviders = dbContextProviders.ToDictionary(x => x.Name, v => (DbContext)v);
         private bool disposedValue;
@@ -12,12 +13,14 @@ namespace TakeFramework.EntityFrameworkCore
 
         public void BeginTransaction(string? name = null)
         {
-            GetContext(name).Database.BeginTransaction();
+            if (GetContext(name).Database.CurrentTransaction is null)
+                GetContext(name).Database.BeginTransaction();
         }
 
         private DbContext GetContext(string? name)
         {
-            if (dbContextProviders.TryGetValue(name, out var context))
+
+            if (dbContextProviders.TryGetValue(name ?? dBSettings.Value.DBSettingList.First(x => x.IsDefault).Name, out var context))
             {
                 return context;
             }
@@ -26,15 +29,41 @@ namespace TakeFramework.EntityFrameworkCore
                 throw new InvalidOperationException();
             }
         }
-
+        private void SaveChanges(string? name = null)
+        {
+            if (GetContext(name).Database.CurrentTransaction is null)
+            {
+                throw new ArgumentException("事物未启动");
+            }
+            else
+            {
+                GetContext(name).SaveChanges();
+            }
+        }
         public void CommitTransaction(string? name = null)
         {
-            GetContext(name).Database.CommitTransaction();
+            if (GetContext(name).Database.CurrentTransaction is null)
+            {
+                throw new ArgumentException("事物未启动");
+            }
+            else
+            {
+                SaveChanges(name);
+                GetContext(name).Database.CommitTransaction();
+            }
+
         }
 
         public void RollbackTransaction(string? name = null)
         {
-            GetContext(name).Database.RollbackTransaction();
+            if (GetContext(name).Database.CurrentTransaction is null)
+            {
+                throw new ArgumentException("事物未启动");
+            }
+            else
+            {
+                GetContext(name).Database.RollbackTransaction();
+            }
         }
         protected virtual void Dispose(bool disposing)
         {

@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sample.EntityFrameworkCore;
 
 #nullable disable
 
-namespace Sample.EntityFrameworkCore.Migrations.Sample2Db
+namespace Sample.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(Sample2DbContext))]
-    partial class Sample2DbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(SampleDbContext))]
+    [Migration("20231213110035_v0.1")]
+    partial class v01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,10 +25,13 @@ namespace Sample.EntityFrameworkCore.Migrations.Sample2Db
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Sample.Core.User", b =>
+            modelBuilder.Entity("Sample.Domain.Blog", b =>
                 {
                     b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("datetime2");
@@ -48,13 +54,13 @@ namespace Sample.EntityFrameworkCore.Migrations.Sample2Db
                     b.Property<long>("ModifiedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Blog");
                 });
 #pragma warning restore 612, 618
         }
