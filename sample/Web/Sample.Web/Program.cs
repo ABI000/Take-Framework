@@ -1,6 +1,8 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Sample.EntityFrameworkCore;
 using Sample.Host.Shared;
+using Sample.Server;
 using Serilog;
 using Serilog.Events;
 using TakeFramework.Swagger;
@@ -40,7 +42,6 @@ namespace Sample.Web
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options));
 
 
-
             builder.Services.AddSwagger(builder.Configuration);
             builder.Services.AddMemoryCache();
             builder.Services.AddHostConfiguration(builder.Configuration);
@@ -56,8 +57,8 @@ namespace Sample.Web
             {
                 app.UseSwagger(builder.Configuration);
             }
-            app.UseAuthentication();
-            app.UseAuthorization();
+            // app.UseAuthentication();
+            // app.UseAuthorization();
             app.MapControllers();
             app.Run();
 

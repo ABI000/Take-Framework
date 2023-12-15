@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\TakeFramework.Mapper\TakeFramework.AutoMapper.csproj" />
     <ProjectReference Include="..\Sample.Domain.Shared\Sample.Domain.Shared.csproj" />
-    <ProjectReference Include="..\Sample.EntityFrameworkCore\Sample.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>

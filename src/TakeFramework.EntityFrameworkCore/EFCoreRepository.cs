@@ -8,7 +8,7 @@ namespace TakeFramework.EntityFrameworkCore
 {
 
     public class EFCoreRepository<T, TPrimaryKey, TDbContext> : BaseRepository<T, TPrimaryKey>, IBaseRepository<T, TPrimaryKey>
-             where T : class, IEntity<TPrimaryKey>, new()
+             where T : class, IEntity<TPrimaryKey>
             where TDbContext : DbContext
     {
         protected readonly DbContext dbContext;

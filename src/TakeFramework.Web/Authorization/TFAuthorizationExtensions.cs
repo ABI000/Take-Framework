@@ -7,11 +7,8 @@ namespace TakeFramework.Web.Authorization
     {
         public static IServiceCollection AddTFAuthorization(this IServiceCollection services)
         {
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(TFAuthorizationPolicyProvider.POLICY_PREFIX,
-                    policy => policy.AddRequirements(new TFPolicyRequirement()));
-            });
+            services.AddAuthorizationBuilder()
+                .AddPolicy(TFAuthorizationPolicyProvider.POLICY_PREFIX, policy => policy.AddRequirements(new TFPolicyRequirement()));
             services.AddSingleton<IAuthorizationHandler, TFAuthorizationHandler>();
             services.AddSingleton<IAuthorizationPolicyProvider, TFAuthorizationPolicyProvider>();
             return services;

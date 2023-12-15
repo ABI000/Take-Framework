@@ -6,13 +6,10 @@ using TakeFramework.Domain.Uow;
 
 namespace TakeFramework;
 
-public class UowInterceptor : IInterceptor
+public class UowInterceptor(IUnitOfWork unitOfWork) : IInterceptor
 {
-    private readonly IUnitOfWork _unitOfWork;
-    public UowInterceptor(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+
     public void Intercept(IInvocation invocation)
     {
         UnitOfWorkAttribute? attribute = invocation.MethodInvocationTarget.GetCustomAttributes(typeof(UnitOfWorkAttribute), false).FirstOrDefault() as UnitOfWorkAttribute;

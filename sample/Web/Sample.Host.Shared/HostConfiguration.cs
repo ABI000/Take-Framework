@@ -3,12 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sample.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using TakeFramework.AutoMapper;
 using TakeFramework.Cache;
+using TakeFramework.Domain.Managers;
 using TakeFramework.Domain.Repositories;
 using TakeFramework.Domain.Services;
 using TakeFramework.Domain.Uow;
-using TakeFramework.EntityFrameworkCore;
 using TakeFramework.Json;
 using TakeFramework.JWT;
 using TakeFramework.Localization;
@@ -16,7 +15,9 @@ using TakeFramework.Web;
 using TakeFramework.Web.Authentication;
 using TakeFramework.Web.Authorization;
 using TakeFramework.Web.Middleware;
-
+using TakeFramework.EntityFrameworkCore;
+using TakeFramework.AutoMapper;
+using TakeFramework.DynamicProxys;
 namespace Sample.Host.Shared
 {
 
@@ -28,10 +29,10 @@ namespace Sample.Host.Shared
             services.AddHttpContextAccessor();
             services.AddCache(configuration);
             services.AddAutoMapper();
+            services.AddManager();
             services.AddService();
             services.AddRepository();
             services.AddTakeFrameworkDbContext<SampleDbContext>(configuration);
-            services.AddTakeFrameworkDbContext<Sample2DbContext>(configuration);
             services.AddErorrMiddleware();
             services.AddLocalization(configuration);
             services.AddControllers().AddJsonOptions(options =>
@@ -45,15 +46,15 @@ namespace Sample.Host.Shared
             });
 
             services.AddUnitOfWork();
+            services.AddDynamicProxys();
             services.AddJwt(configuration);
-            services.AddTFAuthentication();
-
-            services.AddTFAuthorization();
+            // services.AddTFAuthentication();
+            // services.AddTFAuthorization();
             return services;
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)
         {
-            app.UseLocalization(configuration);
+            //app.UseLocalization(configuration);
             app.UseErorrMiddleware();
             return app;
         }
