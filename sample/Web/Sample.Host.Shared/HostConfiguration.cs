@@ -11,7 +11,6 @@ using TakeFramework.Domain.Uow;
 using TakeFramework.Json;
 using TakeFramework.JWT;
 using TakeFramework.Localization;
-using TakeFramework.Web;
 using TakeFramework.Web.Authentication;
 using TakeFramework.Web.Authorization;
 using TakeFramework.Web.Middleware;

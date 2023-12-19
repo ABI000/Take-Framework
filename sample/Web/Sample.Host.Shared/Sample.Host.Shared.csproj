@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\..\src\TakeFramework.Mapper\TakeFramework.AutoMapper.csproj" />
     <ProjectReference Include="..\Sample.EntityFrameworkCore\Sample.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Sample.Server\Sample.Server.csproj" />
+    <ProjectReference Include="..\..\..\src\TakeFramework.SemanticKernel\TakeFramework.SemanticKernel.csproj" />
   </ItemGroup>
 
 </Project>

@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.8">
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\src\TakeFramework.Swagger\TakeFramework.Swagger.csproj" />
+    <!-- <ProjectReference Include="..\..\..\..\src\TakeFramework.Swagger\TakeFramework.Swagger.csproj" /> -->
     <ProjectReference Include="..\..\Sample.Host.Shared\Sample.Host.Shared.csproj" />
     <ProjectReference Include="..\Client\SampleBlazor.Client.csproj" />
   </ItemGroup>
