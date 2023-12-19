@@ -117,7 +117,7 @@ namespace TakeFramework.EntityFrameworkCore
 
         public override List<T> List(Expression<Func<T, bool>>? predicate = null, bool isTracking = false)
         {
-            return isTracking ? dbset.WhereIF(predicate).ToList() : dbset.AsNoTracking().WhereIF(predicate).ToList();
+            return isTracking ? [.. dbset.WhereIF(predicate)] : [.. dbset.AsNoTracking().WhereIF(predicate)];
         }
 
         public override Task<List<T>> ListAsync(Expression<Func<T, bool>>? predicate = null, bool isTracking = false)

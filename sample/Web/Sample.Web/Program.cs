@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Sample.Host.Shared;
 using Serilog;
 using Serilog.Events;
-//using TakeFramework.Swagger;
+using TakeFramework.Swagger;
 
 namespace Sample.Web
 {
@@ -39,7 +39,7 @@ namespace Sample.Web
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => builder.Configuration.Bind("JwtSettings", options));
 
-            //builder.Services.AddSwagger(builder.Configuration);
+            builder.Services.AddSwagger(builder.Configuration);
             builder.Services.AddMemoryCache();
             builder.Services.AddHostConfiguration(builder.Configuration);
             var app = builder.Build();
@@ -51,7 +51,7 @@ namespace Sample.Web
 
             if (app.Environment.IsDevelopment())
             {
-                //app.UseSwagger(builder.Configuration);
+                app.UseSwagger(builder.Configuration);
             }
             app.UseAuthentication();
             app.UseAuthorization();

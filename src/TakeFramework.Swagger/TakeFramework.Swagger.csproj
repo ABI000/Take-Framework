@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <!-- <PackageReference Include="NSwag.AspNetCore" Version="13.20.0" /> -->
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NSwag.AspNetCore" Version="14.0.0-preview012" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Take-Framework\TakeFramework.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Take-Framework\TakeFramework.csproj" />
+	</ItemGroup>
 
 </Project>

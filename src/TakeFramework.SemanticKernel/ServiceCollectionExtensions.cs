@@ -19,18 +19,21 @@ public static class ServiceCollectionExtensions
     public delegate Task KernelSetupHook(IServiceProvider sp, Kernel kernel);
     public static IServiceCollection AddSemanticKernelServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddHttpClient();
         services.InitializeKernelProvider(configuration);
-
-        services.AddScoped<Kernel>(sp =>
+        services.Configure<SemanticKernelOptions>(configuration.GetSection(SemanticKernelOptions.Position));
+        services.AddScoped(sp =>
         {
             var provider = sp.GetRequiredService<SemanticKernelProvider>();
             var kernel = provider.GetCompletionKernel();
-            sp.GetRequiredService<RegisterFunctionsWithKernel>()(sp, kernel);
+            //sp.GetRequiredService<RegisterFunctionsWithKernel>()(sp, kernel);
 
-            // If KernelSetupHook is not null, invoke custom kernel setup.
-            sp.GetService<KernelSetupHook>()?.Invoke(sp, kernel);
+            //// If KernelSetupHook is not null, invoke custom kernel setup.
+            //sp.GetService<KernelSetupHook>()?.Invoke(sp, kernel);
             return kernel;
         });
+
+        services.AddScoped<SemanticKernelService>();
         return services;
     }
     private static void InitializeKernelProvider(this IServiceCollection services, IConfiguration configuration)
@@ -44,7 +47,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddKernelSetupHook(this IServiceCollection services, KernelSetupHook hook)
     {
         // Add the hook to the service collection
-        services.AddScoped<KernelSetupHook>(sp => hook);
+        services.AddScoped(sp => hook);
         return services;
     }
 }

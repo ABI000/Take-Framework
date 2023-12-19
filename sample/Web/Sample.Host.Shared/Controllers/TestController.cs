@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TakeFramework.Cache;
+using TakeFramework.SemanticKernel;
 using TakeFramework.Web;
 
 namespace Sample.Host.Shared.Controllers
@@ -10,7 +11,8 @@ namespace Sample.Host.Shared.Controllers
     public class TestController : ControllerBase
     {
         private readonly ICacheProvider cacheProvider;
-        public TestController(CacheProviderFactory cacheProviderFactory)
+        private readonly SemanticKernelService semanticKernelService;
+        public TestController(CacheProviderFactory cacheProviderFactory, SemanticKernelService semanticKernelService)
         {
             cacheProvider = cacheProviderFactory.GetCacheProvider();
             //��ʼ������
@@ -18,6 +20,8 @@ namespace Sample.Host.Shared.Controllers
             cacheProvider.Add("LocalizationResource_zh-CN", new List<KeyValuePair<string, string>> {
                 new("ServerError", "�������")
             });
+            this.semanticKernelService = semanticKernelService;
+            this.semanticKernelService=semanticKernelService;
         }
         [HttpGet("GetCache")]
         public ApiResponse GetCache(string key, string value)
@@ -54,6 +58,13 @@ namespace Sample.Host.Shared.Controllers
         public ApiResponse GetAllowAnonymous()
         {
             return new ApiResponse<string>("ok");
+        }
+       
+        [AllowAnonymous()]
+        [HttpGet("semanticKernelServiceTest")]
+        public async Task semanticKernelServiceTest(string prompt)
+        {
+           await  semanticKernelService.Test(prompt);
         }
     }
     public class TestApiResponse

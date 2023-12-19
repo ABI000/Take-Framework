@@ -17,6 +17,7 @@ using TakeFramework.Web.Middleware;
 using TakeFramework.EntityFrameworkCore;
 using TakeFramework.AutoMapper;
 using TakeFramework.DynamicProxys;
+using TakeFramework.SemanticKernel;
 namespace Sample.Host.Shared
 {
 
@@ -43,7 +44,7 @@ namespace Sample.Host.Shared
                 options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetConverter());
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
-
+            services.AddSemanticKernelServices(configuration);
             services.AddUnitOfWork();
             services.AddDynamicProxys();
             services.AddJwt(configuration);
