@@ -28,4 +28,5 @@ bld/
 [Oo]ut/
 [Ll]ogs/
 wwwroot/
+Migrations/
 

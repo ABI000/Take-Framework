@@ -1,9 +1,6 @@
-﻿using Castle.DynamicProxy;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using TakeFramework.Domain.Repositories;
-using TakeFramework.Domain.Services;
 
 namespace TakeFramework.Cache
 {

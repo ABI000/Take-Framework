@@ -1,5 +1,4 @@
-﻿using Castle.DynamicProxy;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace TakeFramework;
 

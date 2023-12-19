@@ -1,7 +1,4 @@
-﻿using Castle.DynamicProxy;
-using Microsoft.Extensions.DependencyInjection;
-using TakeFramework.Domain.Repositories;
-using TakeFramework.Domain.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace TakeFramework.Domain.Uow
 {

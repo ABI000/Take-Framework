@@ -1,5 +1,5 @@
 using Sample.Host.Shared;
-using TakeFramework.Swagger;
+// using TakeFramework.Swagger;
 namespace SampleBlazor.Server
 {
     public class Program
@@ -12,7 +12,7 @@ namespace SampleBlazor.Server
 
             builder.Services.AddControllersWithViews();
             builder.Services.AddRazorPages();
-            builder.Services.AddSwagger(builder.Configuration);
+            //builder.Services.AddSwagger(builder.Configuration);
 
             builder.Services.AddHostConfiguration(builder.Configuration);
             var app = builder.Build();
@@ -20,7 +20,7 @@ namespace SampleBlazor.Server
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger(builder.Configuration);
+                //app.UseSwagger(builder.Configuration);
                 app.UseWebAssemblyDebugging();
             }
             else
