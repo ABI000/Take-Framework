@@ -17,12 +17,18 @@ namespace Sample.Host.Shared.Controllers
             throw new NotImplementedException();
         }
         [HttpPost("Create")]
-         [AllowAnonymous()]
+        [AllowAnonymous()]
         public Task<BlogDto> CreateAsync(BlogDto input)
         {
             return _blogService.CreateAsync(input);
         }
 
+        [HttpPost("SendEvent")]
+        [AllowAnonymous()]
+        public Task SendEvent(BlogDto input)
+        {
+            return _blogService.SendEvent(input);
+        }
 
     }
 }
