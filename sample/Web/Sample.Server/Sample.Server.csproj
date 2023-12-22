@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sample.Domain\Sample.Domain.csproj" />
     <ProjectReference Include="..\Sample.Server.Contracts\Sample.Server.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\src\TakeFramework.EventBus\TakeFramework.EventBus.csproj" />
   </ItemGroup>
 
 </Project>

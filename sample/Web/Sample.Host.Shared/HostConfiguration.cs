@@ -17,6 +17,9 @@ using TakeFramework.Web.Middleware;
 using TakeFramework.EntityFrameworkCore;
 using TakeFramework.AutoMapper;
 using TakeFramework.DynamicProxys;
+using TakeFramework.EventBus;
+using TakeFramework.EventBus.RabbitMQ;
+using Sample.Server;
 using TakeFramework.SemanticKernel;
 namespace Sample.Host.Shared
 {
@@ -35,6 +38,10 @@ namespace Sample.Host.Shared
             services.AddTakeFrameworkDbContext<SampleDbContext>(configuration);
             services.AddErorrMiddleware();
             services.AddLocalization(configuration);
+
+            services.AddEventBus();
+            services.AddEventBusRabbitMQ(configuration);
+            services.AddTransient<BlogIntegrationEventHandler>();
             services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
@@ -54,6 +61,8 @@ namespace Sample.Host.Shared
         }
         public static IApplicationBuilder UseHostConfiguration(this IApplicationBuilder app, IConfiguration configuration)
         {
+            var eventBus = app.ApplicationServices.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<BlogIntegrationEvent, BlogIntegrationEventHandler>();
             //app.UseLocalization(configuration);
             app.UseErorrMiddleware();
             return app;
