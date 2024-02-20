@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.ObjectModel;
 
 namespace TakeFramework.Trees
 {
@@ -11,7 +11,7 @@ namespace TakeFramework.Trees
         /// <summary>
         /// 主键
         /// </summary>
-        public PrimaryKey Id { get; set; }
+        public required PrimaryKey Id { get; set; }
         /// <summary>
         /// 父级主键
         /// </summary>
@@ -24,9 +24,8 @@ namespace TakeFramework.Trees
         /// <summary>
         /// 子集
         /// </summary>
-        public List<Tree<PrimaryKey>>? ChildList { get; set; }
-        [NotNull]
-        public string Name { get; set; }
+        public Collection<Tree<PrimaryKey>>? ChildList { get; set; }
+        public required string Name { get; set; } = "";
         /// <summary>
         /// 层级
         /// </summary>
@@ -34,7 +33,7 @@ namespace TakeFramework.Trees
         /// <summary>
         /// 路径
         /// </summary>
-        public string Path { get; set; }
+        public required string Path { get; set; } = "";
 
 
 
@@ -42,7 +41,7 @@ namespace TakeFramework.Trees
         {
             if (this.ChildList is null)
             {
-                this.ChildList = new List<Tree<PrimaryKey>> { tree };
+                this.ChildList = [tree];
             }
             else
             {
@@ -53,38 +52,39 @@ namespace TakeFramework.Trees
         /// 获取所有父级
         /// </summary>
         /// <returns></returns>
-        public List<Tree<PrimaryKey>> GetAllParentList()
+        public List<T> GetAllParentList<T>() where T : Tree<PrimaryKey>
         {
-            var output = new List<Tree<PrimaryKey>>();
-            GetAllParentList(output, this);
+            var output = new List<T>();
+            Tree<PrimaryKey>.GetAllParentList(output, this);
             return output;
         }
-        private void GetAllParentList(List<Tree<PrimaryKey>> output, Tree<PrimaryKey> node)
+
+        private static void GetAllParentList<T>(List<T> output, Tree<PrimaryKey> node) where T : Tree<PrimaryKey>
         {
             if (node.ParentId is not null)
             {
-                output.Add(node.Parent);
-                GetAllParentList(output, node.Parent);
+                output.Add((T)node.Parent);
+                Tree<PrimaryKey>.GetAllParentList(output, node.Parent);
             }
         }
         /// <summary>
         /// 获取所有子集
         /// </summary>
         /// <returns></returns>
-        public List<Tree<PrimaryKey>> GetAllChildList()
+        public List<T> GetAllChildList<T>() where T : Tree<PrimaryKey>
         {
-            var output = new List<Tree<PrimaryKey>>();
+            var output = new List<T>();
             GetAllChildList(output, this);
             return output;
         }
-        private void GetAllChildList(List<Tree<PrimaryKey>> output, Tree<PrimaryKey> node)
+        private static void GetAllChildList<T>(List<T> output, Tree<PrimaryKey> node) where T : Tree<PrimaryKey>
         {
             if (node.ChildList is not null)
             {
-                output.AddRange(node.ChildList);
                 foreach (var child in node.ChildList)
                 {
-                    GetAllChildList(output, child);
+                    output.Add((T)child);
+                    Tree<PrimaryKey>.GetAllChildList(output, child);
                 }
             }
         }
@@ -94,15 +94,15 @@ namespace TakeFramework.Trees
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Tree<PrimaryKey>? FindNode(PrimaryKey id)
+        public T? FindChildNode<T>(PrimaryKey id) where T : Tree<PrimaryKey>
         {
             if (Id.Equals(id))
             {
-                return this;
+                return (T)this;
             }
             foreach (var child in ChildList)
             {
-                var foundNode = child.FindNode(Id);
+                T? foundNode = child.FindChildNode<T>(Id);
                 if (foundNode != null)
                 {
                     return foundNode;
@@ -115,13 +115,13 @@ namespace TakeFramework.Trees
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Tree<PrimaryKey>? FindParentNode(PrimaryKey id)
+        public T? FindParentNode<T>(PrimaryKey id) where T : Tree<PrimaryKey>
         {
             if (ParentId.Equals(id))
             {
-                return Parent;
+                return (T)Parent;
             }
-            var foundNode = Parent.FindParentNode(Id);
+            T? foundNode = Parent.FindParentNode<T>(Id);
             if (foundNode is not null)
             {
                 return foundNode;
@@ -129,9 +129,9 @@ namespace TakeFramework.Trees
             return null;
         }
 
-        public Tree<PrimaryKey> GenerateTree(IEnumerable<Tree<PrimaryKey>> source)
+        public static T? GenerateTree<T, PrimaryKey>(IEnumerable<T> source) where T : Tree<PrimaryKey>
         {
-            return TreeHelper.GenerateTree(source);
+            return TreeHelper.GenerateTree<T, PrimaryKey>(source);
         }
 
     }
@@ -144,14 +144,14 @@ namespace TakeFramework.Trees
         /// </summary>
         /// <returns></returns>
         /// <exception cref="">存在多个根节点则会报错</exception>
-        public static Tree<PrimaryKey> GenerateTree<PrimaryKey>(IEnumerable<Tree<PrimaryKey>> source)
+        public static T? GenerateTree<T, PrimaryKey>(IEnumerable<T> source) where T : Tree<PrimaryKey>
         {
-            Dictionary<PrimaryKey, Tree<PrimaryKey>> nodeLookup = source.ToDictionary(x => x.Id);
+            Dictionary<PrimaryKey, T> nodeLookup = source.ToDictionary(x => x.Id);
             if (source.Count(x => x.ParentId is null) > 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(source), "多个根节点");
             }
-            Tree<PrimaryKey> output = default;
+            T? output = default;
             foreach (var nodeInfo in source)
             {
                 if (nodeInfo.ParentId is not null)
@@ -160,7 +160,7 @@ namespace TakeFramework.Trees
                 }
                 else
                 {
-                    if (nodeLookup.TryGetValue(nodeInfo.ParentId, out Tree<PrimaryKey>? parentNode))
+                    if (nodeLookup.TryGetValue(nodeInfo.ParentId, out T? parentNode))
                     {
                         nodeInfo.Parent = parentNode;
                         parentNode.AddChild(nodeInfo);
@@ -174,7 +174,7 @@ namespace TakeFramework.Trees
         /// 获取子级
         /// </summary>
         /// <returns></returns>
-        public static List<Tree<PrimaryKey>> GetAllChildList<PrimaryKey>(IEnumerable<Tree<PrimaryKey>> source, PrimaryKey id)
+        public static Collection<Tree<PrimaryKey>> GetAllChildList<PrimaryKey>(IEnumerable<Tree<PrimaryKey>> source, PrimaryKey id)
         {
             Dictionary<PrimaryKey, Tree<PrimaryKey>> nodeLookup = source.ToDictionary(x => x.Id);
             if (source.Count(x => x.ParentId is null) > 1)
@@ -196,11 +196,10 @@ namespace TakeFramework.Trees
         /// 获取父级
         /// </summary>
         /// <returns></returns>
-        public static List<Tree<PrimaryKey>> GetAllParentList<PrimaryKey>(IEnumerable<Tree<PrimaryKey>> source, PrimaryKey id)
+        public static List<T> GetAllParentList<T, PrimaryKey>(IEnumerable<T> source, PrimaryKey id) where T : Tree<PrimaryKey>
         {
             var d = FindNode(source, id);
-            d.GetAllParentList();
-            return new List<Tree<PrimaryKey>>();
+            return d.GetAllParentList<T>();
         }
         /// <summary>
         /// 获取节点
@@ -210,22 +209,19 @@ namespace TakeFramework.Trees
         /// <param name="id"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        public static Tree<PrimaryKey>? FindNode<PrimaryKey>(IEnumerable<Tree<PrimaryKey>> source, PrimaryKey id)
+        public static T? FindNode<T, PrimaryKey>(IEnumerable<T> source, PrimaryKey id) where T : Tree<PrimaryKey>
         {
-            Dictionary<PrimaryKey, Tree<PrimaryKey>> nodeLookup = source.ToDictionary(x => x.Id);
-            if (!nodeLookup.TryGetValue(id, out Tree<PrimaryKey>? output))
+            T? output = source.FirstOrDefault(x => x.Id.Equals(id));
+
+            if (output is not null)
+            {
+                GenerateTree<T, PrimaryKey>(source);
+                return output;
+            }
+            else
             {
                 return null;
             }
-            foreach (var nodeInfo in source)
-            {
-                if (nodeLookup.TryGetValue(nodeInfo.ParentId, out Tree<PrimaryKey>? parentNode))
-                {
-                    nodeInfo.Parent = parentNode;
-                    parentNode.AddChild(nodeInfo);
-                }
-            }
-            return output;
         }
     }
 }

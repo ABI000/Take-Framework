@@ -1,4 +1,6 @@
-﻿namespace TakeFramework.Trees
+﻿using System.Collections.ObjectModel;
+
+namespace TakeFramework.Trees
 {
     /*
      * NodeId不为空，但是ParentId可为空
@@ -29,7 +31,7 @@
         /// <summary>
         /// 子节点
         /// </summary>
-        public List<T>? ChildList { get; set; }
+        public Collection<T>? ChildList { get; set; }
     }
     /// <summary>
     /// 请使用值类型
@@ -52,7 +54,7 @@
         /// <summary>
         /// 子节点
         /// </summary>
-        public List<T> ChildList { get; set; }
+        public Collection<T> ChildList { get; set; }
     }
     public interface ITree
     {
