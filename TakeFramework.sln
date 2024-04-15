@@ -56,15 +56,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Identity", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Identity.EntityFrameworkCore", "src\TakeFramework.Identity.EntityFrameworkCore\TakeFramework.Identity.EntityFrameworkCore.csproj", "{9C2726C0-4D00-4038-B8CE-5E7B6B2073F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.WorkflowEngine", "src\TakeFramework.WorkflowEngine\TakeFramework.WorkflowEngine.csproj", "{38CE8C21-4225-4A6C-BD43-E1760E841F34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.WorkflowEngine", "src\TakeFramework.WorkflowEngine\TakeFramework.WorkflowEngine.csproj", "{38CE8C21-4225-4A6C-BD43-E1760E841F34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.SemanticKernel", "src\TakeFramework.SemanticKernel\TakeFramework.SemanticKernel.csproj", "{A7D0FE65-A73A-4536-8EC8-DD252C479AAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.SemanticKernel", "src\TakeFramework.SemanticKernel\TakeFramework.SemanticKernel.csproj", "{A7D0FE65-A73A-4536-8EC8-DD252C479AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.EventBus", "src\TakeFramework.EventBus\TakeFramework.EventBus.csproj", "{C4F2B36B-CD36-414C-9B09-88B95136FD74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.EventBus", "src\TakeFramework.EventBus\TakeFramework.EventBus.csproj", "{C4F2B36B-CD36-414C-9B09-88B95136FD74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.EventBus.RabbitMQ", "src\TakeFramework.EventBus.RabbitMQ\TakeFramework.EventBus.RabbitMQ.csproj", "{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.EventBus.RabbitMQ", "src\TakeFramework.EventBus.RabbitMQ\TakeFramework.EventBus.RabbitMQ.csproj", "{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CLI", "CLI", "{5913DA4C-9266-48A6-8CD0-21D4DF82F2BF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.FileManger", "src\TakeFramework.FileManger\TakeFramework.FileManger.csproj", "{54C6D682-DF45-4A6E-A389-474FD1DBDA0B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.FileManger.Local", "src\TakeFramework.FileManger.Local\TakeFramework.FileManger.Local.csproj", "{9B98F5DF-93DE-443D-9931-588434CABBCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -164,18 +168,14 @@ Global
 		{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4650F31F-8663-4BA6-8AFB-C1070868650E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4650F31F-8663-4BA6-8AFB-C1070868650E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4650F31F-8663-4BA6-8AFB-C1070868650E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4650F31F-8663-4BA6-8AFB-C1070868650E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A56A4181-0D92-46F0-AA3D-F79FB4D717C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A56A4181-0D92-46F0-AA3D-F79FB4D717C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A56A4181-0D92-46F0-AA3D-F79FB4D717C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A56A4181-0D92-46F0-AA3D-F79FB4D717C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3C4C732-891D-48F8-B967-0D06BD64F50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3C4C732-891D-48F8-B967-0D06BD64F50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3C4C732-891D-48F8-B967-0D06BD64F50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3C4C732-891D-48F8-B967-0D06BD64F50E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54C6D682-DF45-4A6E-A389-474FD1DBDA0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54C6D682-DF45-4A6E-A389-474FD1DBDA0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54C6D682-DF45-4A6E-A389-474FD1DBDA0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54C6D682-DF45-4A6E-A389-474FD1DBDA0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B98F5DF-93DE-443D-9931-588434CABBCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B98F5DF-93DE-443D-9931-588434CABBCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B98F5DF-93DE-443D-9931-588434CABBCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B98F5DF-93DE-443D-9931-588434CABBCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -208,6 +208,8 @@ Global
 		{C4F2B36B-CD36-414C-9B09-88B95136FD74} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
 		{549CE75C-8A0B-4473-BAAB-C42425CDFCCB} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
 		{5913DA4C-9266-48A6-8CD0-21D4DF82F2BF} = {EE547B8B-D395-44B4-83E3-95D14B64470D}
+		{54C6D682-DF45-4A6E-A389-474FD1DBDA0B} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
+		{9B98F5DF-93DE-443D-9931-588434CABBCC} = {B59558BE-5644-4961-B87D-A8F9F1F0495E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C9898B24-2CA0-4C13-BE85-581DC968AE74}

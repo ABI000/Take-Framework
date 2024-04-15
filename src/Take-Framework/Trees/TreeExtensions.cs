@@ -19,8 +19,15 @@
             {
                 return null;
             }
-            output.GenerateTree(source);
+            Tree<PrimaryKey>.GenerateTree<TSource, PrimaryKey>(source);
             return output;
+        }
+        private static void CheckTree<TSource, PrimaryKey>(IEnumerable<TSource> source) where TSource : Tree<PrimaryKey>
+        {
+            if (source.Where(x => x.ParentId == null).Count() > 1)
+            {
+                throw new ArgumentException("具有多个根节点");
+            }
         }
         /// <summary>
         /// 仅返入参中的根节点
@@ -39,16 +46,8 @@
             {
                 return null;
             }
-            output.GenerateTree(source);
+            Tree<PrimaryKey>.GenerateTree<TSource, PrimaryKey>(source);
             return output;
-        }
-
-        private static void CheckTree<TSource, PrimaryKey>(IEnumerable<TSource> source) where TSource : Tree<PrimaryKey>
-        {
-            if (source.Where(x => x.ParentId == null).Count() > 1)
-            {
-                throw new ArgumentException("具有多个根节点");
-            }
         }
     }
 }
