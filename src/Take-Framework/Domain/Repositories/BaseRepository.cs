@@ -8,6 +8,7 @@ namespace TakeFramework.Domain.Repositories
  /// <typeparam name="T"></typeparam>
     public abstract class BaseRepository<T, TPrimaryKey> : IBaseRepository<T, TPrimaryKey>
         where T : class, IEntity<TPrimaryKey>
+        where TPrimaryKey : notnull
     {
         public abstract bool Any(Expression<Func<T, bool>>? predicate = null);
 

@@ -14,7 +14,7 @@
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public interface ITree<PrimaryKey, T> : ITree
-            where T : class
+            where T : class where PrimaryKey : notnull
     {
         /// <summary>
         /// 节点id

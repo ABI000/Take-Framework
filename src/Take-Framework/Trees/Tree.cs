@@ -20,13 +20,13 @@ namespace TakeFramework.Trees
         /// <summary>
         /// 父级主键
         /// </summary>
-        public Tree<PrimaryKey>? Parent { get; set; }
+        public required Tree<PrimaryKey> Parent { get; set; }
         /// <summary>
         /// 子集
         /// </summary>
         public List<Tree<PrimaryKey>>? ChildList { get; set; }
         [NotNull]
-        public string Name { get; set; }
+        public required string Name { get; set; }
         /// <summary>
         /// 层级
         /// </summary>
@@ -34,7 +34,7 @@ namespace TakeFramework.Trees
         /// <summary>
         /// 路径
         /// </summary>
-        public string Path { get; set; }
+        public required string Path { get; set; }
 
 
 

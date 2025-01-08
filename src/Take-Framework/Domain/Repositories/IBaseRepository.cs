@@ -236,7 +236,7 @@ namespace TakeFramework.Domain.Repositories
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public T? SingleOrDefault(Expression<Func<T, bool>>? predicate);
+        public T? SingleOrDefault(Expression<Func<T, bool>> predicate);
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -265,5 +265,8 @@ namespace TakeFramework.Domain.Repositories
         #endregion
 
     }
-    public interface IBaseRepository { }
+    public interface IBaseRepository
+    {
+      
+    }
 }

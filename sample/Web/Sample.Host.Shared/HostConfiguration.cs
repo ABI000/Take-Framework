@@ -51,7 +51,7 @@ namespace Sample.Host.Shared
                 options.JsonSerializerOptions.Converters.Add(new DateTimeOffsetConverter());
                 options.JsonSerializerOptions.Converters.Add(new LongToStringConverter());
             });
-            services.AddSemanticKernelServices(configuration);
+            //services.AddSemanticKernelServices(configuration);
             services.AddUnitOfWork();
             services.AddDynamicProxys();
             services.AddJwt(configuration);
