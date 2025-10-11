@@ -1,10 +1,10 @@
 ﻿using RabbitMQ.Client;
-using Microsoft.Extensions.Logging;
 using Polly.Retry;
 using System.Net.Sockets;
 using RabbitMQ.Client.Exceptions;
 using Polly;
 using RabbitMQ.Client.Events;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 namespace TakeFramework.EventBus.RabbitMQ;
 ///
@@ -17,25 +17,25 @@ public class DefaultPersistentConnection : IPersistentConnection
     public DefaultPersistentConnection(ILogger<DefaultPersistentConnection> logger, IOptions<PersistentConnectionOptions> options)
     {
         _options = options?.Value ?? throw new ArgumentNullException(nameof(logger));
-        _connectionFactory = new ConnectionFactory { HostName = _options.HostName, UserName = _options.UserName, Password = _options.Password, DispatchConsumersAsync = true };
+        _connectionFactory = new ConnectionFactory { HostName = _options.HostName, UserName = _options.UserName, Password = _options.Password };
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _retryCount = options.Value.RetryCount;
     }
-    private IConnection _connection;
+    private IConnection? _connection;
     public bool Disposed;
 
     readonly object _syncRoot = new();
 
     public bool IsConnected => _connection is { IsOpen: true } && !Disposed;
 
-    public IModel CreateModel()
+    public async Task<IChannel> CreateChannelAsync()
     {
         if (!IsConnected)
         {
             throw new InvalidOperationException("No RabbitMQ connections are available to perform this action");
         }
 
-        return _connection.CreateModel();
+        return await _connection!.CreateChannelAsync();
     }
 
     public void Dispose()
@@ -46,15 +46,16 @@ public class DefaultPersistentConnection : IPersistentConnection
 
         try
         {
-            _connection.ConnectionShutdown -= OnConnectionShutdown;
-            _connection.CallbackException -= OnCallbackException;
-            _connection.ConnectionBlocked -= OnConnectionBlocked;
+            _connection!.ConnectionShutdownAsync -= OnConnectionShutdownAsync;
+            _connection.CallbackExceptionAsync -= OnCallbackExceptionAsync;
+            _connection.ConnectionBlockedAsync -= OnConnectionBlockedAsync;
             _connection.Dispose();
         }
         catch (IOException ex)
         {
-            _logger.LogCritical(ex.ToString());
+            _logger.LogCritical(ex, "RabbitMQ critical exception: {ExceptionMessage}", ex.Message);
         }
+        GC.SuppressFinalize(this);
     }
 
     public bool TryConnect()
@@ -63,7 +64,7 @@ public class DefaultPersistentConnection : IPersistentConnection
 
         lock (_syncRoot)
         {
-            var policy = RetryPolicy.Handle<SocketException>()
+            RetryPolicy policy = Policy.Handle<SocketException>()
                 .Or<BrokerUnreachableException>()
                 .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
                 {
@@ -71,17 +72,16 @@ public class DefaultPersistentConnection : IPersistentConnection
                 }
             );
 
-            policy.Execute(() =>
+            policy.Execute(async () =>
             {
-                _connection = _connectionFactory
-                        .CreateConnection();
+                _connection = await _connectionFactory.CreateConnectionAsync();
             });
 
             if (IsConnected)
             {
-                _connection.ConnectionShutdown += OnConnectionShutdown;
-                _connection.CallbackException += OnCallbackException;
-                _connection.ConnectionBlocked += OnConnectionBlocked;
+                _connection!.ConnectionShutdownAsync += OnConnectionShutdownAsync;
+                _connection.CallbackExceptionAsync += OnCallbackExceptionAsync;
+                _connection.ConnectionBlockedAsync += OnConnectionBlockedAsync;
 
                 _logger.LogInformation("RabbitMQ Client acquired a persistent connection to '{HostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
 
@@ -96,30 +96,34 @@ public class DefaultPersistentConnection : IPersistentConnection
         }
     }
 
-    private void OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
+    // 修改事件处理方法为 async Task 返回类型以匹配 AsyncEventHandler 委托签名
+    private async Task OnConnectionBlockedAsync(object sender, ConnectionBlockedEventArgs e)
     {
         if (Disposed) return;
 
         _logger.LogWarning("A RabbitMQ connection is shutdown. Trying to re-connect...");
 
         TryConnect();
+        await Task.CompletedTask;
     }
 
-    void OnCallbackException(object sender, CallbackExceptionEventArgs e)
+    private async Task OnCallbackExceptionAsync(object sender, CallbackExceptionEventArgs e)
     {
         if (Disposed) return;
 
         _logger.LogWarning("A RabbitMQ connection throw exception. Trying to re-connect...");
 
         TryConnect();
+        await Task.CompletedTask;
     }
 
-    void OnConnectionShutdown(object sender, ShutdownEventArgs reason)
+    private async Task OnConnectionShutdownAsync(object sender, ShutdownEventArgs reason)
     {
         if (Disposed) return;
 
         _logger.LogWarning("A RabbitMQ connection is on shutdown. Trying to re-connect...");
 
         TryConnect();
+        await Task.CompletedTask;
     }
 }

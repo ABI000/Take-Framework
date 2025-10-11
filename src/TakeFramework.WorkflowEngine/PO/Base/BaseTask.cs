@@ -4,40 +4,40 @@ using TakeFramework.WorkflowEngine.Enums;
 namespace TakeFramework.WorkflowEngine.PO.Base
 {
     /// <summary>
-    /// 任务父类
+    /// Base class for workflow tasks.
     /// </summary>
     public class BaseTask : FullAuditEntity<long, long>
     {
         /// <summary>
-        /// 流程id
+        /// Workflow identifier.
         /// </summary>
         public long WorkflowId { get; set; }
         /// <summary>
-        /// 名称
+        /// Task name.
         /// </summary>
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// 步骤id    
+        /// Step identifier.
         /// </summary>
         public int StepId { get; set; }
         /// <summary>
-        /// 下一步骤    
+        /// Next step identifier.
         /// </summary>
         public int NextStepId { get; set; }
         /// <summary>
-        /// 事件id    
+        /// Event identifier.
         /// </summary>
         public string EventId { get; set; } = string.Empty;
         /// <summary>
-        /// 事件名称   
+        /// Event name.
         /// </summary>
         public string EventName { get; set; } = string.Empty;
         /// <summary>
-        /// 事件数据
+        /// Event data in JSON or string format.
         /// </summary>
         public string EventData { get; set; } = string.Empty;
         /// <summary>
-        /// 审批方式枚举
+        /// Task approval method type.
         /// </summary>
         public EnumTaskApprovalMethodType TaskApprovalMethodType { get; set; }
     }

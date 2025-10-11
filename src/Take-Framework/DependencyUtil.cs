@@ -26,7 +26,7 @@ namespace TakeFramework
             }
             else if (refresh || assemblies.Length == 0)
             {
-                assemblies = DependencyContext.Default.RuntimeLibraries.Where(item => !relatedRegex.IsMatch(item.Name)).SelectMany(item => item.GetDefaultAssemblyNames(DependencyContext.Default)).Select(Assembly.Load).ToArray();
+                assemblies = [.. DependencyContext.Default.RuntimeLibraries.Where(item => !relatedRegex.IsMatch(item.Name)).SelectMany(item => item.GetDefaultAssemblyNames(DependencyContext.Default)).Select(Assembly.Load)];
             }
             return assemblies;
         }

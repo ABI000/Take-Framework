@@ -1,5 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using TakeFramework.AutoMapper;
+﻿
+using AutoMapper;
+using AutoMapper.Execution;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
+using TakeFramework.Cache;
 
 namespace TakeFramework.AutoMapper
 {
@@ -7,7 +11,9 @@ namespace TakeFramework.AutoMapper
     {
         public static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
-            services.AddAutoMapper(DependencyUtil.GetReferencedAssemblies());
+            Assembly[] assemblies = DependencyUtil.GetReferencedAssemblies();
+            IEnumerable<Type> types = assemblies.SelectMany(x => x.GetTypes().Where(w => !w.IsInterface && typeof(Profile).IsAssignableFrom(w)));
+            services.AddAutoMapper(cfg => { }, types);
             return services;
         }
     }

@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
@@ -54,13 +54,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Identity", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.Identity.EntityFrameworkCore", "src\TakeFramework.Identity.EntityFrameworkCore\TakeFramework.Identity.EntityFrameworkCore.csproj", "{9C2726C0-4D00-4038-B8CE-5E7B6B2073F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.WorkflowEngine", "src\TakeFramework.WorkflowEngine\TakeFramework.WorkflowEngine.csproj", "{38CE8C21-4225-4A6C-BD43-E1760E841F34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.WorkflowEngine", "src\TakeFramework.WorkflowEngine\TakeFramework.WorkflowEngine.csproj", "{38CE8C21-4225-4A6C-BD43-E1760E841F34}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.SemanticKernel", "src\TakeFramework.SemanticKernel\TakeFramework.SemanticKernel.csproj", "{A7D0FE65-A73A-4536-8EC8-DD252C479AAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.SemanticKernel", "src\TakeFramework.SemanticKernel\TakeFramework.SemanticKernel.csproj", "{A7D0FE65-A73A-4536-8EC8-DD252C479AAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.EventBus", "src\TakeFramework.EventBus\TakeFramework.EventBus.csproj", "{C4F2B36B-CD36-414C-9B09-88B95136FD74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.EventBus", "src\TakeFramework.EventBus\TakeFramework.EventBus.csproj", "{C4F2B36B-CD36-414C-9B09-88B95136FD74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TakeFramework.EventBus.RabbitMQ", "src\TakeFramework.EventBus.RabbitMQ\TakeFramework.EventBus.RabbitMQ.csproj", "{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TakeFramework.EventBus.RabbitMQ", "src\TakeFramework.EventBus.RabbitMQ\TakeFramework.EventBus.RabbitMQ.csproj", "{549CE75C-8A0B-4473-BAAB-C42425CDFCCB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CLI", "CLI", "{5913DA4C-9266-48A6-8CD0-21D4DF82F2BF}"
 EndProject
